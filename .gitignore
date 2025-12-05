@@ -47,3 +47,4 @@ yarn-error.log
 !/resources/assets/vendor/js/template-customizer.js
 /.env
 /package-lock.json
+/composer.lock

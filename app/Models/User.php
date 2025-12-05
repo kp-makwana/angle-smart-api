@@ -10,7 +10,6 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
-use Spatie\Translatable\HasTranslations;
 
 // Spatie Packages
 
@@ -20,13 +19,11 @@ class User extends Authenticatable implements HasMedia
     Notifiable,
     HasRoles,
     LogsActivity,
-    InteractsWithMedia,
-    HasTranslations;
+    InteractsWithMedia;
 
   /**
    * Translatable fields
    */
-  public array $translatable = ['name'];
 
   /**
    * Fillable attributes

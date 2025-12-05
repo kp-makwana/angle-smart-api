@@ -37,10 +37,14 @@ class OtpController extends Controller
     try {
       $this->otp->verify($user, $request->otp);
     } catch (ValidationException $e) {
-      return back()->withErrors($e->errors());
+      return back()->withErrors([
+        'otp' => $e->getMessage() ?? __('otp.invalid')
+      ]);
     }
 
-    return redirect()->route('dashboard')->with('success', 'Your email has been verified!');
+    return redirect()
+      ->route('dashboard')
+      ->with('success', __('otp.verified'));
   }
 
   /**
@@ -50,6 +54,6 @@ class OtpController extends Controller
   {
     $this->otp->resend($user);
 
-    return back()->with('success', 'A new OTP has been sent to your email.');
+    return back()->with('success', __('otp.resent'));
   }
 }

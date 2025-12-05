@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Auth\LoginRequest;
 use App\Http\Requests\V1\Auth\RegisterRequest;
 use App\Services\AuthService;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -26,22 +27,45 @@ class AuthController extends Controller
     return view('auth.login');
   }
 
+  /**
+   * Register user + redirect to OTP page
+   */
   public function register(RegisterRequest $request)
   {
-    $this->auth->register($request->validated());
-    return redirect()->route('dashboard')->with('success', 'Registration successful!');
+    $user = $this->auth->register($request->validated());
+
+    return redirect()
+      ->route('verify.otp', $user->id)
+      ->with('success', __('auth.register_success'));
   }
 
+  /**
+   * Login logic (only after verification)
+   */
   public function login(LoginRequest $request)
   {
-    $this->auth->login($request->validated());
-    return redirect()->route('dashboard')->with('success', 'Logged in successfully!');
+    try {
+      $this->auth->login($request->validated());
+    } catch (ValidationException $e) {
+      return back()
+        ->withErrors(['email' => __('auth.email_verify_first')])
+        ->withInput();
+    }
+
+    return redirect()
+      ->route('dashboard')
+      ->with('success', __('auth.login_success'));
   }
 
+  /**
+   * Logout
+   */
   public function logout()
   {
     auth()->logout();
-    return redirect()->route('login')->with('success', 'Logged out successfully!');
-  }
 
+    return redirect()
+      ->route('login')
+      ->with('success', __('auth.logout_success'));
+  }
 }

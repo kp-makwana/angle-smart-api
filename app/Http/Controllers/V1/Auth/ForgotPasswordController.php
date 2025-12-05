@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1\Auth;
 use App\Http\Controllers\Controller;
 use App\Services\PasswordService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ForgotPasswordController extends Controller
 {
@@ -26,9 +27,13 @@ class ForgotPasswordController extends Controller
       'email' => 'required|email'
     ]);
 
-    $this->service->sendResetLink($request->email);
+    try {
+      $this->service->sendResetLink($request->email);
+    } catch (ValidationException $e) {
+      return back()->withErrors(['email' => __('password.reset_link_failed')]);
+    }
 
-    return back()->with('success', 'Password reset link has been sent to your email.');
+    return back()->with('success', __('password.reset_link_sent'));
   }
 
   public function showResetForm($token)
@@ -44,15 +49,19 @@ class ForgotPasswordController extends Controller
       'password' => 'required|min:6|confirmed',
     ]);
 
-    $this->service->resetPassword([
-      'email'                 => $request->email,
-      'password'              => $request->password,
-      'password_confirmation' => $request->password_confirmation,
-      'token'                 => $request->token,
-    ]);
+    try {
+      $this->service->resetPassword([
+        'email'                 => $request->email,
+        'password'              => $request->password,
+        'password_confirmation' => $request->password_confirmation,
+        'token'                 => $request->token,
+      ]);
+    } catch (ValidationException $e) {
+      return back()->withErrors(['email' => __('password.reset_failed')]);
+    }
 
     return redirect()
       ->route('login')
-      ->with('success', 'Password has been reset successfully.');
+      ->with('success', __('password.reset_success'));
   }
 }
