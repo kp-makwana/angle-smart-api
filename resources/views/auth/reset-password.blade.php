@@ -5,7 +5,7 @@
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Reset Password Basic - Pages')
+@section('title', 'Reset Password')
 
 @section('vendor-style')
   @vite(['resources/assets/vendor/libs/@form-validation/form-validation.scss'])

@@ -136,6 +136,10 @@ class LanguageLineSeeder extends Seeder
         'en' => 'Sign in instead',
         'hi' => 'साइन इन करें',
       ],
+      'create_account' => [
+        'en' => 'Create account',
+        'hi' => 'खाता बनाएं',
+      ],
     ];
   }
 

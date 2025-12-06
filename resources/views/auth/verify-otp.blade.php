@@ -8,7 +8,7 @@
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Email Verification - Register')
+@section('title', 'Email Verification')
 
 @section('vendor-style')
   @vite(['resources/assets/vendor/libs/@form-validation/form-validation.scss'])
@@ -28,7 +28,7 @@
 @endsection
 
 @section('page-script')
-  @vite(['resources/assets/js/pages-auth.js', 'resources/assets/js/pages-auth-two-steps.js'])
+  @vite(['resources/assets/js/pages-auth.js', 'resources/assets/js/pages-verify-otp.js'])
 @endsection
 
 @section('content')

@@ -16,7 +16,7 @@
 
 @extends('layouts/layoutMaster')
 
-@section('title', __('Login') . ' - ' . $appName)
+@section('title', __('Login'))
 
 @section('vendor-style')
   @vite(['resources/assets/vendor/libs/@form-validation/form-validation.scss'])
@@ -63,12 +63,12 @@
 
               <!-- Email / Username -->
               <div class="mb-6 form-control-validation">
-                <label class="form-label">Email or Username</label>
+                <label class="form-label">Email</label>
                 <input
                   type="text"
                   class="form-control @error('email') is-invalid @enderror"
                   name="email"
-                  placeholder="Enter your email or username"
+                  placeholder="Enter your email"
                   value="{{ old('email') }}"
                   autofocus
                 />
