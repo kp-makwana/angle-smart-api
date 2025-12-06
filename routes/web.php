@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\V1\AccountController;
 use App\Http\Controllers\V1\Auth\AuthController;
 use App\Http\Controllers\V1\Auth\ForgotPasswordController;
 use App\Http\Controllers\V1\Auth\OtpController;
@@ -413,6 +414,11 @@ Route::middleware('auth')->group(function () {
   // Logout
   Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
+
+  Route::group(['prefix' => 'accounts','as' => 'accounts.'], function () {
+    Route::get('/', [AccountController::class, 'index'])->name('index');
+  });
+
 });
 
 Route::get('/',[HomeController::class,'index'])->name('home');
