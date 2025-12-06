@@ -158,7 +158,10 @@ document.addEventListener('DOMContentLoaded', function () {
                   '<span class="d-none d-sm-inline-block">Add Account</span>' +
                   "</span>",
                 className: "add-new btn btn-primary",
-                action: () => (window.location = baseUrl + "account/create")
+                action: () => {
+                  const modal = new bootstrap.Modal(document.getElementById('addAccountModal'));
+                  modal.show();
+                }
               }
             ]
           }

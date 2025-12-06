@@ -10,15 +10,12 @@ class AccountController extends Controller
 {
   public function index()
   {
-    $this->authorize('viewAny', Account::class);
     $pageConfigs = ['myLayout' => 'horizontal'];
     return view('accounts.index',compact('pageConfigs'));
   }
 
   public function list(Request $request)
   {
-    $this->authorize('viewAny', Account::class);
-
     $query = Account::query();
 
     if (!auth()->user()->hasRole('admin')) {

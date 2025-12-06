@@ -43,5 +43,5 @@
       </table>
     </div>
   </div>
-
+@include('components.add-account')
 @endsection
