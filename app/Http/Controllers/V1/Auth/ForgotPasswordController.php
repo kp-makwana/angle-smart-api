@@ -18,7 +18,8 @@ class ForgotPasswordController extends Controller
 
   public function showLinkRequestForm()
   {
-    return view('auth.forgot-password');
+    $pageConfigs = ['myLayout' => 'blank'];
+    return view('auth.forgot-password', ['pageConfigs' => $pageConfigs]);
   }
 
   public function sendResetLinkEmail(Request $request)
@@ -36,9 +37,11 @@ class ForgotPasswordController extends Controller
     return back()->with('success', __('password.reset_link_sent'));
   }
 
-  public function showResetForm($token)
+  public function showResetForm($token, Request $request)
   {
-    return view('auth.reset-password', ['token' => $token]);
+    $email = $request->input('email');
+    $pageConfigs = ['myLayout' => 'blank'];
+    return view('auth.reset-password', ['token' => $token,'pageConfigs' => $pageConfigs, 'email' => $email]);
   }
 
   public function resetPassword(Request $request)
