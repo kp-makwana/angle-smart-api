@@ -24,8 +24,8 @@ return new class extends Migration
         $table->string('totp_secret')->nullable();
 
         // Token / Session Data
-        $table->string('session_token')->nullable();
-        $table->string('refresh_token')->nullable();
+        $table->text('session_token')->nullable();
+        $table->text('refresh_token')->nullable();
         $table->timestamp('token_expiry')->nullable();
 
         // Status & Tracking
