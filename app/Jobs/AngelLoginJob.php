@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\V1\Account;
+use App\Services\AngelService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -25,6 +26,6 @@ class AngelLoginJob implements ShouldQueue
      */
     public function handle(): void
     {
-
+      resolve(AngelService::class)->login($this->account);
     }
 }

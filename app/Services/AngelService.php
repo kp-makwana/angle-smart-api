@@ -1,0 +1,142 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\V1\Account;
+use Carbon\Carbon;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
+use OTPHP\TOTP;
+
+class AngelService
+{
+  protected Client $client;
+  protected string $baseUrl = "https://apiconnect.angelone.in";
+
+  public function __construct()
+  {
+    $this->client = new Client();
+  }
+
+  /**
+   * Login using password + TOTP
+   */
+  public function login(Account $account)
+  {
+    try {
+      $clientCode = $account->client_id;
+      $apiKey = $account->api_key;
+      $password = $account->pin;
+      $totp = self::generateTOTP($account->totp_secret);
+
+
+      $endpoint = $this->baseUrl . "/rest/auth/angelbroking/user/v1/loginByPassword";
+
+      $headers = [
+        'Content-Type' => 'application/json',
+        'Accept' => 'application/json',
+        'X-UserType' => 'USER',
+        'X-SourceID' => 'WEB',
+        'X-ClientLocalIP' => request()->ip(),
+        'X-ClientPublicIP' => request()->ip(),
+        'X-MACAddress' => '00:00:00:00:00:00',
+        'X-PrivateKey' => $apiKey,
+      ];
+
+      $payload = [
+        "clientcode" => $clientCode,
+        "password" => $password,
+        "totp" => $totp,
+        "state" => "live"
+      ];
+
+
+      $response = $this->client->post($endpoint, [
+        'headers' => $headers,
+        'json' => $payload
+      ]);
+      $success = json_decode($response->getBody(), true);
+
+      $data = $success['data'] ?? null;
+      if ($success['status'] && !empty($data)) {
+        $account->session_token = $data['jwtToken'];
+        $account->refresh_token = $data['refreshToken'];
+        $account->feed_token = $data['feedToken'];
+        $account->is_active = 1;
+        $account->status = 'success';
+
+        $account->last_error = null;
+        $account->last_login_at = Carbon::now();
+        $account->token_expiry = self::getTokenExpiry($data['refreshToken']);
+
+        $account->save();
+
+        activity()
+          ->performedOn($account)
+          ->withProperties([
+            'state' => $data['state'],
+            'session_token' => $data['jwtToken'],
+          ])
+          ->log('Angel login successful');
+      } elseif (!$success['status']) {
+        $account->is_active = 0;
+        $account->last_error_code = $success['errorcode'];
+        $account->last_error = $success['message'];
+        $account->status = 'Fail';
+        $account->save();
+      }
+      return $account;
+    } catch (\Exception $e) {
+      activity()
+        ->performedOn($account)
+        ->withProperties([
+          'client_id' => $account->client_id,
+          'error' => $e->getMessage(),
+        ])
+        ->log('Angel login failed');
+      Log::error("Angel Login Error: " . $e->getMessage());
+      return ['status' => false, 'message' => $e->getMessage()];
+    }
+  }
+
+  public static function generateTOTP(string $totpSecret): string
+  {
+    $totp = TOTP::create($totpSecret, 30, 'sha1', 6);
+    return $totp->now();
+  }
+
+  public function getTokenExpiry(string $token)
+  {
+    $decoded = self::decodeJwt($token);
+    $refreshToken = $decoded['payload']['REFRESH-TOKEN'] ?? null;
+    $decodedData = self::decodeJwt($refreshToken);
+    $expiry = $decodedData['payload']['exp'] ?? null;
+
+    return Carbon::createFromTimestamp($expiry)->setTimezone(config('app.timezone'));
+  }
+
+  public static function decodeJwt(string $jwt): ?array
+  {
+    $parts = explode('.', $jwt);
+
+    if (count($parts) !== 3) {
+      return null;
+    }
+
+    return [
+      'header' => json_decode(self::base64UrlDecode($parts[0]), true),
+      'payload' => json_decode(self::base64UrlDecode($parts[1]), true),
+      'signature' => $parts[2],
+    ];
+  }
+
+  private static function base64UrlDecode(string $input): string
+  {
+    $remainder = strlen($input) % 4;
+    if ($remainder > 0) {
+      $input .= str_repeat('=', 4 - $remainder);
+    }
+    $input = str_replace(['-', '_'], ['+', '/'], $input);
+    return base64_decode($input);
+  }
+}

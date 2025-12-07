@@ -28,11 +28,13 @@ return new class extends Migration
         // Token / Session Data
         $table->text('session_token')->nullable();
         $table->text('refresh_token')->nullable();
+        $table->text('feed_token')->nullable();
         $table->timestamp('token_expiry')->nullable();
 
         // Status & Tracking
         $table->boolean('is_active')->default(true); // enable/disable
         $table->string('status')->default('idle');   // idle, logged_in, error, etc
+        $table->text('last_error_code')->nullable();
         $table->text('last_error')->nullable();
         $table->timestamp('last_login_at')->nullable();
 
