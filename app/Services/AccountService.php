@@ -16,7 +16,7 @@ class AccountService
     $account = new Account();
 
     $account->user_id       = Auth::id();
-    $account->account_name  = $data['nickname'];
+    $account->nickname  = $data['nickname'];
     $account->client_id     = $data['client_id'];
     $account->pin           = $data['pin'];
     $account->api_key       = $data['api_key'];
