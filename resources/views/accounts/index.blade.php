@@ -190,7 +190,7 @@
             </td>
             <td>{!! $account['token_expiry'] !!}</td>
             <td>{{ $account['last_login_at'] ?? '-' }}</td>
-            <td class="d-flex justify-content-end">
+            <td class="justify-content-end">
               <div class="dropdown">
                 <button class="btn btn-icon btn-text-secondary rounded-pill" data-bs-toggle="dropdown">
                   <i class="ti tabler-dots-vertical"></i>
@@ -221,8 +221,6 @@
       </div>
     @endif
   </div>
-
-
 
   <!-- DataTable with Buttons -->
   <style>
