@@ -19,22 +19,19 @@ class AccountController extends Controller
   {
     $this->service = $service;
   }
-  public function index()
+  public function index(Request $request)
   {
     $pageConfigs = ['myLayout' => 'horizontal'];
-    return view('accounts.index',compact('pageConfigs'));
-  }
 
-  public function list(Request $request)
-  {
     $query = Account::query();
 
+    // If user is not admin → filter only his accounts
     if (!auth()->user()->hasRole('admin')) {
       $query->where('user_id', auth()->id());
     }
 
     // GLOBAL SEARCH
-    if ($search = $request->input('search.value')) {
+    if ($search = $request->input('search')) {
       $query->where(function ($q) use ($search) {
         $q->where('account_name', 'like', "%{$search}%")
           ->orWhere('client_id', 'like', "%{$search}%")
@@ -42,25 +39,19 @@ class AccountController extends Controller
       });
     }
 
-    // 🔹 COLUMN FILTER: STATUS (hidden column index 3 in JS)
-    $statusFilter = $request->input('columns.3.search.value');
-    if (!empty($statusFilter)) {
-      $query->where('status', $statusFilter);
+    // STATUS FILTER
+    if ($status = $request->input('status')) {
+      $query->where('status', $status);
     }
 
-    $recordsTotal = $query->count();
+    // PAGINATION
+    $perPage = $request->input('per_page', 10);
+    $accounts = $query->paginate($perPage)->appends($request->query());
 
-    $accounts = $query
-      ->skip($request->input('start', 0))
-      ->take($request->input('length', 10))
-      ->get();
+    $mapped = ListResource::collection($accounts->items())->resolve();
 
-    return response()->json([
-      "draw" => intval($request->input('draw')),
-      "recordsTotal" => $recordsTotal,
-      "recordsFiltered" => $recordsTotal,
-      "data" => ListResource::collection($accounts),
-    ]);
+    $accounts->setCollection(collect($mapped));
+    return view('accounts.index', compact('pageConfigs', 'accounts'));
   }
 
   public function store(StoreRequest $request)

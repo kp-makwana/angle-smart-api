@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\V1\Account;
 use App\Policies\AccountPolicy;
 use App\Policies\UserPolicy;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Vite;
@@ -35,5 +36,6 @@ class AppServiceProvider extends ServiceProvider
             }
             return [];
         });
+        Paginator::defaultView('vendor.pagination.rounded');
     }
 }
