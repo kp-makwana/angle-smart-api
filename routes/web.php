@@ -418,12 +418,7 @@ Route::middleware('auth')->group(function () {
   Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
-  Route::group(['prefix' => 'accounts','as' => 'accounts.'], function () {
-    Route::get('/', [AccountController::class, 'index'])->name('index');
-    Route::get('create', [AccountController::class, 'create'])->name('create');
-    Route::post('store', [AccountController::class, 'store'])->name('store');
-    Route::delete('destroy/{account}', [AccountController::class, 'destroy'])->name('destroy');
-  });
+  Route::resource('accounts', AccountController::class)->only(['index', 'create', 'store', 'destroy']);
 
 });
 
