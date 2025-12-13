@@ -95,4 +95,20 @@ class AccountService
 
     return $account;
   }
+
+  public function destroy(Account $account): void
+  {
+    activity()
+      ->performedOn($account)
+      ->causedBy(Auth::user())
+      ->withProperties([
+        'account_id'   => $account->id,
+        'client_id'    => $account->client_id,
+        'nickname'     => $account->nickname,
+        'deleted_by'   => Auth::id(),
+      ])
+      ->log('Smart-API Account Deleted');
+
+    $account->delete();
+  }
 }

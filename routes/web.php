@@ -422,6 +422,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [AccountController::class, 'index'])->name('index');
     Route::get('create', [AccountController::class, 'create'])->name('create');
     Route::post('store', [AccountController::class, 'store'])->name('store');
+    Route::delete('destroy/{account}', [AccountController::class, 'destroy'])->name('destroy');
   });
 
 });

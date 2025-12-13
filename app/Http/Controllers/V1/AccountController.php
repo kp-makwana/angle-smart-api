@@ -39,4 +39,13 @@ class AccountController extends Controller
     $this->service->create($validatedData);
     return redirect()->route('accounts.index')->with('success', "Account added successfully.Take few second for angle login");
   }
+
+  public function destroy(Account $account)
+  {
+    $this->authorize('delete', $account);
+    $this->service->destroy($account);
+    return redirect()
+      ->route('accounts.index')
+      ->with('success', 'Account deleted successfully');
+  }
 }

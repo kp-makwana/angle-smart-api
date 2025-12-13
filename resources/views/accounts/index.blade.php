@@ -9,7 +9,10 @@
   'resources/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.scss',
   'resources/assets/vendor/libs/flatpickr/flatpickr.scss',
   'resources/assets/vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.scss',
-  'resources/assets/vendor/libs/@form-validation/form-validation.scss'])
+  'resources/assets/vendor/libs/@form-validation/form-validation.scss',
+  'resources/assets/vendor/libs/animate-css/animate.scss',
+   'resources/assets/vendor/libs/sweetalert2/sweetalert2.scss'
+  ])
 @endsection
 
 <!-- Vendor Scripts -->
@@ -18,6 +21,7 @@
   'resources/assets/vendor/libs/moment/moment.js', 'resources/assets/vendor/libs/flatpickr/flatpickr.js',
   'resources/assets/vendor/libs/@form-validation/popular.js',
   'resources/assets/vendor/libs/@form-validation/bootstrap5.js',
+  'resources/assets/vendor/libs/sweetalert2/sweetalert2.js',
   'resources/assets/vendor/libs/@form-validation/auto-focus.js'])
 @endsection
 
@@ -186,7 +190,20 @@
                 <ul class="dropdown-menu dropdown-menu-end">
                   <li><a class="dropdown-item" href="#">Details</a></li>
                   <li><a class="dropdown-item" href="#">Edit</a></li>
-                  <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+                  <li>
+                    <form action="{{ route('accounts.destroy', $account['id']) }}"
+                          method="POST"
+                          class="d-inline delete-account-form">
+                      @csrf
+                      @method('DELETE')
+
+                      <button type="button"
+                              class="dropdown-item text-danger btn-delete-account"
+                              data-name="{{ $account['nickname'] ?: $account['client_id'] }}">
+                        Delete
+                      </button>
+                    </form>
+                  </li>
                 </ul>
               </div>
             </td>
@@ -244,3 +261,33 @@
 
   </style>
 @endsection
+@section('page-script')
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.btn-delete-account').forEach(button => {
+        button.addEventListener('click', function () {
+          const form = this.closest('form');
+          const name = this.dataset.name;
+          Swal.fire({
+            title: 'Are you sure?',
+            text: `You are about to delete "${name}" account. This action cannot be undone!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            customClass: {
+              confirmButton: 'btn btn-danger me-2',
+              cancelButton: 'btn btn-label-secondary'
+            },
+            buttonsStyling: false
+          }).then((result) => {
+            if (result.isConfirmed) {
+              form.submit();
+            }
+          });
+        });
+      });
+    });
+  </script>
+@endsection
+
