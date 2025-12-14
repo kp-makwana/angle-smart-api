@@ -80,14 +80,23 @@ class AngelService
             'session_token' => $data['jwtToken'],
           ])
           ->log('Angel login successful');
-      } elseif (!$success['status']) {
+        return ['status' => true, 'message' => 'Angel login successful'];
+      } else {
         $account->is_active = 0;
         $account->last_error_code = $success['errorcode'];
         $account->last_error = $success['message'];
         $account->status = 'Fail';
         $account->save();
+
+        activity()
+          ->performedOn($account)
+          ->withProperties([
+            'client_id' => $account->client_id,
+            'error' => $success['message'],
+          ])
+          ->log('Angel login failed');
+        return ['status' => false, 'message' => $success['message']];
       }
-      return $account;
     } catch (\Exception $e) {
       activity()
         ->performedOn($account)

@@ -5,7 +5,9 @@ namespace App\Services;
 use App\Http\Resources\V1\Account\ListResource;
 use App\Jobs\AngelLoginJob;
 use App\Models\V1\Account;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AccountService
 {
@@ -68,32 +70,29 @@ class AccountService
    */
   public function create(array $data): Account
   {
-    $account = new Account();
+    return DB::transaction(function () use ($data) {
+      $account = new Account();
+      $account->user_id       = Auth::id();
+      $account->nickname      = $data['nickname'];
+      $account->client_id     = $data['client_id'];
+      $account->pin           = $data['pin'];
+      $account->api_key       = $data['api_key'];
+      $account->client_secret = $data['client_secret'];
+      $account->totp_secret   = $data['totp_secret'];
+      $account->status        = 'active';
+      $account->is_active     = 1;
 
-    $account->user_id       = Auth::id();
-    $account->nickname  = $data['nickname'];
-    $account->client_id     = $data['client_id'];
-    $account->pin           = $data['pin'];
-    $account->api_key       = $data['api_key'];
-    $account->client_secret = $data['client_secret'];
-    $account->totp_secret   = $data['totp_secret'];
-    $account->status        = 'active';
-    $account->is_active     = 1;
+      $account->save();
 
-    $account->save();
+      $response = resolve(AngelService::class)->login($account);
 
-    activity()
-      ->performedOn($account)
-      ->causedBy(Auth::user())
-      ->withProperties([
-        'client_id' => $account->client_id,
-        'account_name' => $account->account_name
-      ])
-      ->log('New Smart-API Account Created');
+      // ❌ Login failed → rollback
+      if (empty($response['status'])) {
+        throw new Exception($response['message'] ?? 'Angel login failed');
+      }
 
-    AngelLoginJob::dispatch($account);
-
-    return $account;
+      return $account;
+    });
   }
 
   public function destroy(Account $account): void
