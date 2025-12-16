@@ -51,7 +51,11 @@ class AccountController extends Controller
   {
     $this->authorize('view',$account);
     $pageConfigs = ['myLayout' => 'horizontal'];
-    return view('accounts.show', compact('account','pageConfigs'));
+    $result = $this->service->getHoldings($account);
+    $data =  $result['data'];
+    $summary = $data['totalholding'] ?? [];
+    $holdings = $data['holdings'] ?? [];
+    return view('accounts.show', compact('account','pageConfigs','summary','holdings'));
   }
 
   public function destroy(Account $account)

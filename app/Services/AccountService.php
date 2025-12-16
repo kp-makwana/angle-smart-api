@@ -122,4 +122,9 @@ class AccountService
     }
     return $response;
   }
+
+  public function getHoldings($account)
+  {
+    return resolve(AngelService::class)->getAllHolding($account);
+  }
 }

@@ -147,165 +147,169 @@
       <!-- / Customer cards -->
       <!-- Invoice table -->
       <div class="card">
-        <h5 class="card-header">Hoverable rows</h5>
+        <div class="card-header border-bottom">
+          <div class="row align-items-center g-3">
+
+            <!-- Holding Value -->
+            <div class="col-md-2 col-6">
+              <div class="d-flex align-items-center gap-2">
+                <div class="avatar avatar-sm">
+                  <div class="avatar-initial rounded bg-label-primary">
+                    <i class="icon-base ti tabler-wallet"></i>
+                  </div>
+                </div>
+                <div>
+                  <small class="text-muted d-block">Current Value</small>
+                  <span class="fw-semibold">&#8377;{{ $summary['totalholdingvalue'] ?? 0 }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Investment -->
+            <div class="col-md-2 col-6">
+              <div class="d-flex align-items-center gap-2">
+                <div class="avatar avatar-sm">
+                  <div class="avatar-initial rounded bg-label-info">
+                    <i class="icon-base ti tabler-currency-rupee"></i>
+                  </div>
+                </div>
+                <div>
+                  <small class="text-muted d-block">Investment</small>
+                  <span class="fw-semibold">&#8377;{{ $summary['totalinvvalue'] ?? 0 }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- P&L -->
+            <div class="col-md-2 col-6">
+              <div class="d-flex align-items-center gap-2">
+                <div class="avatar avatar-sm">
+                  <div class="avatar-initial rounded
+            {{ ($summary['totalprofitandloss'] ?? 0) >= 0 ? 'bg-label-success' : 'bg-label-danger' }}">
+                    <i class="icon-base ti tabler-trending-up"></i>
+                  </div>
+                </div>
+                <div>
+                  <small class="text-muted d-block">P&amp;L</small>
+                  <span class="fw-semibold
+            {{ ($summary['totalprofitandloss'] ?? 0) >= 0 ? 'text-success' : 'text-danger' }}">
+            &#8377;{{ $summary['totalprofitandloss'] ?? 0 }}
+          </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- P&L % -->
+            <div class="col-md-2 col-6">
+              <div class="d-flex align-items-center gap-2">
+                <div class="avatar avatar-sm">
+                  <div class="avatar-initial rounded
+            {{ ($summary['totalpnlpercentage'] ?? 0) >= 0 ? 'bg-label-success' : 'bg-label-danger' }}">
+                    <i class="icon-base ti tabler-percentage"></i>
+                  </div>
+                </div>
+                <div>
+                  <small class="text-muted d-block">P&amp;L %</small>
+                  <span class="fw-semibold
+            {{ ($summary['totalpnlpercentage'] ?? 0) >= 0 ? 'text-success' : 'text-danger' }}">
+            {{ $summary['totalpnlpercentage'] ?? 0 }}%
+          </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Refresh -->
+            <div class="col-md-4 text-md-end text-start">
+              <button type="button"
+                      class="btn btn-sm btn-outline-primary"
+                      onclick="window.location.reload()">
+                <i class="icon-base ti tabler-refresh me-1"></i> Refresh
+              </button>
+            </div>
+
+          </div>
+        </div>
         <div class="table-responsive text-nowrap">
-          <table class="table table-hover">
+          <table class="table table-hover align-middle">
             <thead>
             <tr>
-              <th>Project</th>
-              <th>Client</th>
-              <th>Users</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th>Symbol</th>
+              <th>Quantity</th>
+              <th>Avg Price</th>
+              <th>LTP</th>
+              <th>P&amp;L</th>
+              <th class="text-end">Actions</th>
             </tr>
             </thead>
+
             <tbody class="table-border-bottom-0">
-            <tr>
-              <td>
-                <i class="icon-base ti tabler-brand-angular icon-md text-danger me-4"></i>
-                <span class="fw-medium">Angular Project</span>
-              </td>
-              <td>Albert Cook</td>
-              <td>
-                <ul class="list-unstyled m-0 avatar-group d-flex align-items-center">
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                      class="avatar avatar-xs pull-up" title="Lilian Fuller">
-                    <img src="{{ asset('assets/img/avatars/5.png') }}" alt="Avatar" class="rounded-circle" />
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                      class="avatar avatar-xs pull-up" title="Sophia Wilkerson">
-                    <img src="{{ asset('assets/img/avatars/6.png') }}" alt="Avatar" class="rounded-circle" />
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                      class="avatar avatar-xs pull-up" title="Christina Parker">
-                    <img src="{{ asset('assets/img/avatars/7.png') }}" alt="Avatar" class="rounded-circle" />
-                  </li>
-                </ul>
-              </td>
-              <td><span class="badge bg-label-primary me-1">Active</span></td>
-              <td>
-                <div class="dropdown">
-                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                    <i class="icon-base ti tabler-dots-vertical"></i>
-                  </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:void(0);"><i
-                        class="icon-base ti tabler-pencil me-1"></i> Edit</a>
-                    <a class="dropdown-item" href="javascript:void(0);"><i class="icon-base ti tabler-trash me-1"></i>
-                      Delete</a>
+            @forelse($holdings as $row)
+              <tr>
+
+                <!-- Symbol -->
+                <td>
+                  <span class="fw-semibold">{{ $row['tradingsymbol'] }}</span>
+                  <div class="text-muted small">{{ $row['exchange'] ?? 'NSE' }}</div>
+                </td>
+
+                <!-- Quantity -->
+                <td>
+                  <span class="fw-semibold">{{ $row['quantity'] }}</span>
+                  <div class="text-muted small">
+                    T1: {{ $row['t1quantity'] ?? 0 }}
                   </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><i class="icon-base ti tabler-brand-react-native icon-md text-info me-4"></i> <span
-                  class="fw-medium">React Project</span></td>
-              <td>Barry Hunter</td>
-              <td>
-                <ul class="list-unstyled m-0 avatar-group d-flex align-items-center">
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                      class="avatar avatar-xs pull-up" title="Lilian Fuller">
-                    <img src="{{ asset('assets/img/avatars/5.png') }}" alt="Avatar" class="rounded-circle" />
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                      class="avatar avatar-xs pull-up" title="Sophia Wilkerson">
-                    <img src="{{ asset('assets/img/avatars/6.png') }}" alt="Avatar" class="rounded-circle" />
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                      class="avatar avatar-xs pull-up" title="Christina Parker">
-                    <img src="{{ asset('assets/img/avatars/7.png') }}" alt="Avatar" class="rounded-circle" />
-                  </li>
-                </ul>
-              </td>
-              <td><span class="badge bg-label-success me-1">Completed</span></td>
-              <td>
-                <div class="dropdown">
-                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                    <i class="icon-base ti tabler-dots-vertical"></i>
-                  </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:void(0);"><i
-                        class="icon-base ti tabler-pencil me-1"></i> Edit</a>
-                    <a class="dropdown-item" href="javascript:void(0);"><i class="icon-base ti tabler-trash me-1"></i>
-                      Delete</a>
+                </td>
+
+                <!-- Avg Price -->
+                <td>
+                  ₹{{ number_format($row['averageprice'], 2) }}
+                </td>
+
+                <!-- LTP -->
+                <td>
+                  <span class="{{ $row['ltp'] > $row['averageprice'] ? 'text-success' : 'text-danger' }}">
+                    ₹{{ number_format($row['ltp'], 2) }}
+                  </span>
+                </td>
+
+                <!-- P&L -->
+                <td>
+          <span class="fw-semibold
+            {{ $row['profitandloss'] >= 0 ? 'text-success' : 'text-danger' }}">
+            ₹{{ number_format($row['profitandloss'], 2) }}
+          </span>
+                  <div class="small
+            {{ $row['pnlpercentage'] >= 0 ? 'text-success' : 'text-danger' }}">
+                    {{ $row['pnlpercentage'] }}%
                   </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <i class="icon-base ti tabler-brand-vue icon-md text-success me-4"></i>
-                <span class="fw-medium">VueJs Project</span>
-              </td>
-              <td>Trevor Baker</td>
-              <td>
-                <ul class="list-unstyled m-0 avatar-group d-flex align-items-center">
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                      class="avatar avatar-xs pull-up" title="Lilian Fuller">
-                    <img src="{{ asset('assets/img/avatars/5.png') }}" alt="Avatar" class="rounded-circle" />
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                      class="avatar avatar-xs pull-up" title="Sophia Wilkerson">
-                    <img src="{{ asset('assets/img/avatars/6.png') }}" alt="Avatar" class="rounded-circle" />
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                      class="avatar avatar-xs pull-up" title="Christina Parker">
-                    <img src="{{ asset('assets/img/avatars/7.png') }}" alt="Avatar" class="rounded-circle" />
-                  </li>
-                </ul>
-              </td>
-              <td><span class="badge bg-label-info me-1">Scheduled</span></td>
-              <td>
-                <div class="dropdown">
-                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                    <i class="icon-base ti tabler-dots-vertical"></i>
-                  </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:void(0);"><i
-                        class="icon-base ti tabler-pencil me-1"></i> Edit</a>
-                    <a class="dropdown-item" href="javascript:void(0);"><i class="icon-base ti tabler-trash me-1"></i>
-                      Delete</a>
+                </td>
+
+                <!-- Actions -->
+                <td class="text-end">
+                  <div class="d-flex justify-content-end gap-2">
+
+                    <button type="button"
+                            class="btn btn-sm btn-success"
+                            onclick="openBuyModal(this)">
+                      Buy
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-sm btn-danger"
+                            onclick="openSellModal(this)">
+                      Sell
+                    </button>
+
                   </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <i class="icon-base ti tabler-brand-bootstrap icon-md text-primary me-4"></i>
-                <span class="fw-medium">Bootstrap Project</span>
-              </td>
-              <td>Jerry Milton</td>
-              <td>
-                <ul class="list-unstyled m-0 avatar-group d-flex align-items-center">
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                      class="avatar avatar-xs pull-up" title="Lilian Fuller">
-                    <img src="{{ asset('assets/img/avatars/5.png') }}" alt="Avatar" class="rounded-circle" />
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                      class="avatar avatar-xs pull-up" title="Sophia Wilkerson">
-                    <img src="{{ asset('assets/img/avatars/6.png') }}" alt="Avatar" class="rounded-circle" />
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                      class="avatar avatar-xs pull-up" title="Christina Parker">
-                    <img src="{{ asset('assets/img/avatars/7.png') }}" alt="Avatar" class="rounded-circle" />
-                  </li>
-                </ul>
-              </td>
-              <td><span class="badge bg-label-warning me-1">Pending</span></td>
-              <td>
-                <div class="dropdown">
-                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                    <i class="icon-base ti tabler-dots-vertical"></i>
-                  </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:void(0);"><i
-                        class="icon-base ti tabler-pencil me-1"></i> Edit</a>
-                    <a class="dropdown-item" href="javascript:void(0);"><i class="icon-base ti tabler-trash me-1"></i>
-                      Delete</a>
-                  </div>
-                </div>
-              </td>
-            </tr>
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="6" class="text-center text-muted py-4">
+                  No holdings found
+                </td>
+              </tr>
+            @endforelse
             </tbody>
           </table>
         </div>
