@@ -420,6 +420,7 @@ Route::middleware('auth')->group(function () {
 
   Route::resource('accounts', AccountController::class)->only(['index', 'create', 'store', 'destroy','show']);
   Route::get('account/refresh/{account}', [AccountController::class,'refresh'])->name('account.refresh');
+  Route::get('account/{account}/orders', [AccountController::class,'orders'])->name('account.orders');
 
 });
 

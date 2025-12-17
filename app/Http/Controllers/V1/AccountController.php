@@ -76,4 +76,11 @@ class AccountController extends Controller
     $this->service->refresh($account);
     return redirect()->back()->with('success', 'Account refreshed successfully');
   }
+
+  public function orders(Account $account)
+  {
+    $this->authorize('view',$account);
+    $pageConfigs = ['myLayout' => 'horizontal'];
+    return view('accounts.orders',compact('account','pageConfigs'));
+  }
 }
