@@ -427,6 +427,7 @@ Route::middleware('auth')->group(function () {
     Route::get('{account}/orders', [AccountController::class, 'orders'])->name('orders');
     Route::post('{account}/cancel-order/{order}', [AccountController::class, 'cancelOrder'])->name('cancel.order');
     Route::post('{account}/modify-order', [AccountController::class, 'modifyOrder'])->name('modify.order');
+    Route::post('{account}/place-order', [AccountController::class, 'placeOrder'])->name('place.order');
   });
 });
 Route::get('/',[HomeController::class,'index'])->name('home');

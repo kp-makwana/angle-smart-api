@@ -58,7 +58,9 @@ class AccountController extends Controller
     $data =  $result['data'];
     $summary = $data['totalholding'] ?? [];
     $holdings = $data['holdings'] ?? [];
-    return view('accounts.show', compact('account','pageConfigs','summary','holdings'));
+    $tokens = collect($holdings)->pluck('symboltoken')
+      ->filter()->unique()->values()->toArray();
+    return view('accounts.show', compact('account','pageConfigs','summary','holdings','tokens'));
   }
 
   public function destroy(Account $account)
@@ -120,5 +122,10 @@ class AccountController extends Controller
       $flashType = 'error';
     }
     return redirect()->back()->with($flashType,$message);
+  }
+
+  public function placeOrder(Request $request, Account $account)
+  {
+    dd($request->all());
   }
 }
