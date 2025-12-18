@@ -109,7 +109,7 @@
           correlationID: clientCode,
           action: 1,
           params: {
-            mode: 1,
+            mode: 2,
             tokenList: [{
               exchangeType: 1,
               tokens: tokens
@@ -120,52 +120,60 @@
 
       socket.onmessage = (event) => {
 
+        // Heartbeat
+        if (typeof event.data === 'string') return;
         if (!(event.data instanceof ArrayBuffer)) return;
 
-        const bytes = new Uint8Array(event.data);
         const view  = new DataView(event.data);
+        const bytes = new Uint8Array(event.data);
 
-        // Ignore non-price packets
-        if (bytes.length < 48) return;
+        const mode = view.getInt8(0);
+        if (mode !== 2) return; // ✅ QUOTE MODE ONLY
 
-        // Token (fixed-length for your feed)
+        // ---- TOKEN ----
         let token = '';
-        for (let i = 2; i <= 6; i++) {
-          if (bytes[i] !== 0) token += String.fromCharCode(bytes[i]);
+        for (let i = 2; i < 27; i++) {
+          if (bytes[i] === 0) break;
+          token += String.fromCharCode(bytes[i]);
         }
-
-        const rawLtp = view.getInt32(43, true);
-        if (rawLtp === 0) return;
-
-        const ltp = rawLtp / 100;
 
         const tds = ltpCellMap[token];
         if (!tds) return;
 
+        // ---- PRICES ----
+        const ltp   = view.getInt32(43, true) / 100;
+        const close = Number(view.getBigInt64(115, true)) / 100;
+
+        if (!ltp || !close) return;
+
+        // ---- ANGEL ONE CALCULATION ----
+        const diff = ltp - close;
+        const pct  = (diff / close) * 100;
+
+        const isUp = diff >= 0;
+        const cls  = isUp ? 'text-success' : 'text-danger';
+        const sign = isUp ? '+' : '';
+
         tds.forEach(td => {
+
+          const orderType  = td.dataset.orderType;
           const orderPrice = parseFloat(td.dataset.orderPrice);
-          if (!orderPrice || orderPrice <= 0) return;
 
-          // ✅ CORRECT DIFFERENCE
-          const diff = orderPrice - ltp;
+          // ---- ORDER PRICE (STATIC, ANGEL STYLE) ----
+          if (orderType === 'market') {
+            td.querySelector('.order-price').innerHTML = 'AT MARKET';
+          } else {
+            td.querySelector('.order-price').innerHTML =
+              `₹${orderPrice.toFixed(2)}`;
+          }
 
-          const isProfit = diff > 0;
-          const cls = isProfit ? 'text-success' : 'text-danger';
-          const sign = isProfit ? '+' : '';
-
-          const liveDiv = td.querySelector('.ltp-live');
-          if (!liveDiv) return;
-
-          // ✅ SINGLE-LINE DISPLAY
-          liveDiv.innerHTML = `
-        <span class="text-muted">LTP</span>
-        <span class="">
-          ₹${ltp.toFixed(2)}
-        </span>
-        <span class="${cls}">
-          (₹${sign}${Math.abs(diff).toFixed(2)})
-        </span>
-      `;
+          // ---- LTP LINE (LIVE) ----
+          td.querySelector('.ltp-live').innerHTML = `
+    LTP ₹${ltp.toFixed(2)}
+    <span class="${cls}">
+      (${sign}${pct.toFixed(2)}%)
+    </span>
+  `;
         });
       };
       socket.onerror = err => console.error("❌ Socket Error", err);
@@ -359,10 +367,15 @@
 
                           <td class="ltp-cell"
                               data-token="{{ (string) $order['symboltoken'] }}"
-                              data-order-price="{{ (float) $order['price'] }}">
+                              data-order-price="{{ (float) $order['price'] }}"
+                              data-order-type="{{ strtolower($order['ordertype']) }}">
 
                             <div class="fw-semibold order-price">
-                              {{ $orderPrice }}
+                              @if(strtolower($order['ordertype']) === 'market')
+                                AT MARKET
+                              @else
+                                ₹{{ $orderPrice }}
+                              @endif
                             </div>
 
                             <div class="small ltp-live">

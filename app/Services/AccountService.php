@@ -178,8 +178,8 @@ class AccountService
       }
       foreach ($groupedOrders as $key => $group) {
         usort($group, function ($a, $b) {
-          $timeA = $a['exchtime'] ?? $a['updatetime'] ?? null;
-          $timeB = $b['exchtime'] ?? $b['updatetime'] ?? null;
+          $timeA = $a['updatetime'] ?? $a['exchtime'] ?? null;
+          $timeB = $b['updatetime'] ?? $b['exchtime'] ?? null;
           if (!$timeA || !$timeB) {
             return 0;
           }
