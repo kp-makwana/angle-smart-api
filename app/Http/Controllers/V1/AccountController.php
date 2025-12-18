@@ -81,6 +81,17 @@ class AccountController extends Controller
   {
     $this->authorize('view',$account);
     $pageConfigs = ['myLayout' => 'horizontal'];
-    return view('accounts.orders',compact('account','pageConfigs'));
+    $response = $this->service->getOrderBook($account);
+    $orders = $response['data'] ?? [];
+
+    if ($response['success']){
+      $flashType = 'success';
+      $message = 'Order fetched successfully';
+    } else {
+      $flashType = 'error';
+      $message = $response['message'];
+    }
+    return view('accounts.orders',compact('account','pageConfigs','orders'))
+      ->with($flashType,$message);
   }
 }

@@ -127,4 +127,67 @@ class AccountService
   {
     return resolve(AngelService::class)->getAllHolding($account);
   }
+
+  public function getOrderBook($account)
+  {
+    $response = resolve(AngelService::class)->getOrderBook($account);
+
+    if ($response['success']) {
+
+      $orders = $response['data'] ?? [];
+
+      $groupedOrders = [
+        'Pending'  => [],
+        'Executed' => [],
+        'Rejected' => [],
+        'Cancel'   => [],
+      ];
+
+      foreach ($orders as $order) {
+
+        // ✅ Remove -EQ from symbol (display purpose)
+        if (!empty($order['tradingsymbol'])) {
+          $order['tradingsymbol'] = str_replace('-EQ', '', $order['tradingsymbol']);
+        }
+
+        // Normalize status
+        $status = strtolower($order['status'] ?? '');
+
+        switch ($status) {
+          case 'complete':
+            $groupedOrders['Executed'][] = $order;
+            break;
+
+          case 'open':
+          case 'trigger pending':
+            $groupedOrders['Pending'][] = $order;
+            break;
+
+          case 'rejected':
+            $groupedOrders['Rejected'][] = $order;
+            break;
+
+          case 'cancelled':
+            $groupedOrders['Cancel'][] = $order;
+            break;
+
+          default:
+            $groupedOrders['Pending'][] = $order;
+        }
+      }
+      foreach ($groupedOrders as $key => $group) {
+        usort($group, function ($a, $b) {
+          $timeA = $a['exchtime'] ?? $a['updatetime'] ?? null;
+          $timeB = $b['exchtime'] ?? $b['updatetime'] ?? null;
+          if (!$timeA || !$timeB) {
+            return 0;
+          }
+          return strtotime($timeB) <=> strtotime($timeA); // DESC
+        });
+        $groupedOrders[$key] = $group;
+      }
+      $response['data'] = $groupedOrders;
+    }
+    return $response;
+  }
 }

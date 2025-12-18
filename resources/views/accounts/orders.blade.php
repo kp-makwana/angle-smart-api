@@ -26,11 +26,11 @@
     'resources/assets/js/app-ecommerce-customer-detail-overview.js'
   ])
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
       const deleteBtn = document.getElementById('btn-delete-account');
       if (!deleteBtn) return;
 
-      deleteBtn.addEventListener('click', function () {
+      deleteBtn.addEventListener('click', function() {
         const form = this.closest('form');
 
         Swal.fire({
@@ -51,7 +51,51 @@
           }
         });
       });
+
+      const dt_ajax_table = document.querySelector('.datatables-ajax');
+      if (dt_ajax_table) {
+        let dt_ajax = new DataTable(dt_ajax_table, {
+          processing: true,
+          ajax: {
+            url: assetsPath + 'json/ajax.php',
+            dataSrc: 'data'
+          },
+          layout: {
+            topStart: {
+              rowClass: 'row mx-3 my-0 justify-content-between',
+              features: [
+                {
+                  pageLength: {
+                    menu: [7, 10, 25, 50, 100],
+                    text: 'Show_MENU_entries'
+                  }
+                }
+              ]
+            },
+            topEnd: {
+              search: {
+                placeholder: ''
+              }
+            },
+            bottomStart: {
+              rowClass: 'row mx-3 justify-content-between',
+              features: ['info']
+            },
+            bottomEnd: 'paging'
+          },
+          language: {
+            paginate: {
+              next: '<i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-18px"></i>',
+              previous: '<i class="icon-base ti tabler-chevron-left scaleX-n1-rtl icon-18px"></i>',
+              first: '<i class="icon-base ti tabler-chevrons-left scaleX-n1-rtl icon-18px"></i>',
+              last: '<i class="icon-base ti tabler-chevrons-right scaleX-n1-rtl icon-18px"></i>'
+            }
+          }
+        });
+      }
     });
+
+
   </script>
 @endsection
 
@@ -153,7 +197,7 @@
           <div class="card-header d-flex align-items-center justify-content-between">
             <div>
               <h5 class="mb-1">Today’s Orders Book</h5>
-{{--              <p class="text-muted mb-0">Equity orders (static demo)</p>--}}
+              {{--              <p class="text-muted mb-0">Equity orders (static demo)</p>--}}
             </div>
 
             <button class="btn btn-sm btn-outline-primary" onclick="window.location.reload()">
@@ -164,157 +208,126 @@
           <!-- Tabs -->
           <div class="card-body p-0">
             <ul class="nav nav-tabs nav-fill border-bottom" role="tablist">
-              <li class="nav-item">
-                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-new">
-                  New
-                </button>
-              </li>
-              <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-preparing">
-                  Preparing
-                </button>
-              </li>
-              <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-shipping">
-                  Shipping
-                </button>
-              </li>
+              @foreach(array_keys($orders) as $k => $title)
+                <li class="nav-item">
+                  <button class="nav-link {{ $k==0?'active':'' }}" data-bs-toggle="tab"
+                          data-bs-target="#{{ strtolower($title) }}">
+                    {{ $title }}
+                  </button>
+                </li>
+              @endforeach
             </ul>
 
             <div class="tab-content" style="padding: 0 !important;">
-
               <!-- ================= NEW ORDERS ================= -->
-              <div class="card tab-pane fade show active" id="tab-new">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle mb-0">
-                    <thead>
-                    <tr>
-                      <th>Symbol</th>
-                      <th>Qty</th>
-                      <th>Order Price</th>
-                      <th>LTP</th>
-                      <th>Status</th>
-                      <th class="text-end">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+              @foreach($orders as $key => $orderList)
 
-                    <tr>
-                      <td>
-                        <span class="fw-semibold">RELIANCE</span>
-                        <div class="small text-muted">NSE · CNC</div>
-                      </td>
-                      <td>
-                        <span class="fw-semibold">10</span>
-                      </td>
-                      <td>₹2,456.50</td>
-                      <td>
-                        <span class="text-success">₹2,462.10</span>
-                      </td>
-                      <td>
-                        <span class="badge bg-label-warning">Pending</span>
-                      </td>
-                      <td class="text-end">
-                        <div class="d-flex justify-content-end gap-2">
-                          <button class="btn btn-sm btn-success">Buy</button>
-                          <button class="btn btn-sm btn-danger">Sell</button>
-                        </div>
-                      </td>
-                    </tr>
+                <div class="card tab-pane fade {{ $loop->first ? 'show active' : '' }}"
+                     id="{{ strtolower($key) }}">
 
-                    </tbody>
-                  </table>
+                  <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                      <thead>
+                      <tr>
+                        <th>Symbol</th>
+                        <th>Order Type</th>
+                        <th>Order Price</th>
+                        <th>Executed Price</th>
+                        <th>Side</th>
+                        <th>Executed Time</th>
+                        <th class="text-end">Action</th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      @forelse($orderList as $order)
+
+                        @php
+                          // Side
+                          $side = $order['transactiontype']; // BUY / SELL
+                          $sideClass = $side === 'BUY' ? 'success' : 'danger';
+
+                          // Order Type
+                          $isMarket = $order['ordertype'] === 'MARKET';
+                          $orderTypeBadge = $isMarket ? 'secondary' : 'info';
+
+                          // Prices
+                          $orderPrice = $isMarket
+                              ? 'AT MARKET'
+                              : '₹' . number_format($order['price'], 2);
+
+                          $executedPrice = (float) $order['averageprice'];
+
+                          // Time with seconds
+                          $executedTime = $order['exchtime'] ?: $order['updatetime'];
+                        @endphp
+
+                        <tr class="order-row cursor-pointer"
+                            onclick="openOrder('{{ $order['orderid'] }}')">
+
+                          {{-- 1️⃣ Symbol + Share --}}
+                          <td>
+                            <div class="fw-semibold">{{ $order['tradingsymbol'] }}</div>
+                            <div class="text-muted small">
+                              {{ $order['filledshares'] }}/{{ $order['quantity'] }} Share
+                            </div>
+                          </td>
+
+                          {{-- 2️⃣ Side --}}
+
+                          {{-- 3️⃣ Order Type --}}
+                          <td>
+                            <span class="badge bg-label-gray">
+                              {{ $order['ordertype'] }}
+                            </span>
+                          </td>
+
+                          {{-- 4️⃣ Order Price / AT MARKET --}}
+                          <td>
+                            <span class="fw-semibold">
+                              {{ $orderPrice }}
+                            </span>
+                          </td>
+
+                          {{-- 5️⃣ Executed Price --}}
+                          <td>
+                            <span class="fw-semibold">
+                              ₹{{ number_format($executedPrice, 2) }}
+                            </span>
+                          </td>
+                          <td>
+                            <span class="small badge bg-label-{{ $sideClass }}">
+                              {{ $side }}
+                            </span>
+                          </td>
+                          {{-- 6️⃣ Executed Time --}}
+                          <td>
+                            <span class="text-muted small">
+                              {{ \Carbon\Carbon::parse($executedTime)->format('d M, h:i:s A') }}
+                            </span>
+                          </td>
+
+                          {{-- 7️⃣ Action --}}
+                          <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary">
+                              View
+                            </button>
+                          </td>
+                        </tr>
+                      @empty
+                        <tr>
+                          <td colspan="7" class="text-center text-muted py-4">
+                            No {{ strtolower($key) }} orders found
+                          </td>
+                        </tr>
+                      @endforelse
+                      </tbody>
+
+
+                    </table>
+                  </div>
                 </div>
-              </div>
-
-              <!-- ================= PREPARING ================= -->
-              <div class="tab-pane fade" id="tab-preparing">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle mb-0">
-                    <thead>
-                    <tr>
-                      <th>Symbol</th>
-                      <th>Qty</th>
-                      <th>Avg Price</th>
-                      <th>LTP</th>
-                      <th>Status</th>
-                      <th class="text-end">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <tr>
-                      <td>
-                        <span class="fw-semibold">TCS</span>
-                        <div class="small text-muted">NSE · MIS</div>
-                      </td>
-                      <td>
-                        <span class="fw-semibold">5</span>
-                      </td>
-                      <td>₹3,821.00</td>
-                      <td>
-                        <span class="text-success">₹3,835.40</span>
-                      </td>
-                      <td>
-                        <span class="badge bg-label-info">Executing</span>
-                      </td>
-                      <td class="text-end">
-                        <div class="d-flex justify-content-end gap-2">
-                          <button class="btn btn-sm btn-outline-secondary" disabled>
-                            In Progress
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <!-- ================= SHIPPING ================= -->
-              <div class="tab-pane fade" id="tab-shipping">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle mb-0">
-                    <thead>
-                    <tr>
-                      <th>Symbol</th>
-                      <th>Qty</th>
-                      <th>Avg Price</th>
-                      <th>P&amp;L</th>
-                      <th>Status</th>
-                      <th class="text-end">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <tr>
-                      <td>
-                        <span class="fw-semibold">INFY</span>
-                        <div class="small text-muted">NSE · CNC</div>
-                      </td>
-                      <td>
-                        <span class="fw-semibold">20</span>
-                      </td>
-                      <td>₹1,482.30</td>
-                      <td>
-                        <span class="text-success fw-semibold">₹+312.40</span>
-                        <div class="small text-success">+1.05%</div>
-                      </td>
-                      <td>
-                        <span class="badge bg-label-success">Completed</span>
-                      </td>
-                      <td class="text-end">
-                        <button class="btn btn-sm btn-outline-primary">
-                          View
-                        </button>
-                      </td>
-                    </tr>
-
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              @endforeach
 
             </div>
           </div>
