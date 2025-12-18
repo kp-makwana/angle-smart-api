@@ -303,7 +303,7 @@ $activeClass = in_array($currentRouteName, $activeRoutes) ? 'active' : '';
 
               <ul class="dropdown-menu dropdown-menu-end">
                 <li>
-                  <a class="dropdown-item mt-0" href="{{ route('profile.show') }}">
+                  <a class="dropdown-item mt-0" href="{{ route('dashboard') }}">
                     <div class="d-flex align-items-center">
                       <div class="flex-shrink-0 me-2">
                         <div class="avatar avatar-online">
@@ -321,7 +321,7 @@ $activeClass = in_array($currentRouteName, $activeRoutes) ? 'active' : '';
                 <li><div class="dropdown-divider my-1 mx-n2"></div></li>
 
                 <li>
-                  <a class="dropdown-item" href="{{ route('profile.show') }}">
+                  <a class="dropdown-item" href="{{ route('dashboard') }}">
                     <i class="icon-base ti tabler-user me-3 icon-md"></i><span>My Profile</span>
                   </a>
                 </li>

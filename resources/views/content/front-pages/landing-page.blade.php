@@ -36,7 +36,8 @@ $configData = Helper::appClasses();
         class="position-absolute top-0 start-50 translate-middle-x object-fit-cover w-100 h-100" data-speed="1" />
       <div class="container">
         <div class="hero-text-box text-center position-relative">
-          <h1 class="text-primary hero-title display-6 fw-extrabold">One dashboard to manage all your businesses</h1>
+          <h1 class="text-primary hero-title display-6 fw-extrabold">One dashboard to manage all angelone accounts
+          </h1>
           <h2 class="hero-sub-title h6 mb-6">
             Production-ready & easy to use Admin Template<br class="d-none d-lg-block" />
             for Reliability and Customizability.
@@ -45,7 +46,7 @@ $configData = Helper::appClasses();
             <span class="hero-btn-item position-absolute d-none d-md-flex fw-medium">Join community <img
                 src="{{ asset('assets/img/front-pages/icons/Join-community-arrow.png') }}" alt="Join community arrow"
                 class="scaleX-n1-rtl" /></span>
-            <a href="#landingPricing" class="btn btn-primary btn-lg">Get early access</a>
+            <a href="{{ route('dashboard') }}" class="btn btn-primary btn-lg">Get early access</a>
           </div>
         </div>
         <div id="heroDashboardAnimation" class="hero-animation-img">

@@ -196,7 +196,7 @@
           <!-- Header -->
           <div class="card-header d-flex align-items-center justify-content-between">
             <div>
-              <h5 class="mb-1">Today’s Orders Book</h5>
+              <h5 class="mb-1">Today’s Orders</h5>
               {{--              <p class="text-muted mb-0">Equity orders (static demo)</p>--}}
             </div>
 
