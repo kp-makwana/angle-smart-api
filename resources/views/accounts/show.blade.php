@@ -375,6 +375,32 @@
         }
       });
     });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const orderForm = document.getElementById('orderForm');
+      if (!orderForm) return;
+
+      orderForm.addEventListener('submit', (e) => {
+
+        // If validation prevented submit, don't spin
+        if (e.defaultPrevented) return;
+
+        const btn = document.getElementById('om-submit-btn');
+        if (!btn) return;
+
+        const spinner = btn.querySelector('.spinner-border');
+        const text = btn.querySelector('.btn-text');
+        const loadingText = btn.querySelector('.btn-loading-text');
+
+        // Disable button
+        btn.disabled = true;
+
+        // Toggle UI
+        text.classList.add('d-none');
+        spinner.classList.remove('d-none');
+        loadingText.classList.remove('d-none');
+      });
+    });
   </script>
 
 @endsection
@@ -723,9 +749,20 @@
             </div>
 
             <div class="col-12 text-center mt-3">
-              <button type="submit" class="btn btn-primary" id="om-submit-btn">
-                Submit Order
+              <button
+                type="submit"
+                class="btn btn-primary d-inline-flex align-items-center justify-content-center"
+                id="om-submit-btn"
+              >
+                <span class="btn-text">Submit Order</span>
+
+                <!-- Spinner -->
+                <span class="spinner-border spinner-border-sm d-none ms-2" role="status"></span>
+
+                <!-- Loading text -->
+                <span class="btn-loading-text d-none ms-2">Placing...</span>
               </button>
+
               <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
                 Cancel
               </button>
