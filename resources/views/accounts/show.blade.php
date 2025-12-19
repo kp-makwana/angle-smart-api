@@ -60,8 +60,11 @@
     const tokens     = @json($tokens);
 
     const ltpCache = {};
-    let activeToken = null; // ✅ REQUIRED FOR MODAL
+    let activeToken = null;
 
+    /* ===============================
+       SAFE READ HELPERS
+    =============================== */
     function canRead(view, offset, size) {
       return view.byteLength >= offset + size;
     }
@@ -71,6 +74,9 @@
         : null;
     }
 
+    /* ===============================
+       SOCKET
+    =============================== */
     document.addEventListener('DOMContentLoaded', () => {
 
       const socket = new WebSocket(
@@ -105,7 +111,7 @@
         if (event.data.byteLength < 60) return;
         if (view.getInt8(0) !== 2) return;
 
-        // TOKEN
+        /* TOKEN */
         let token = '';
         for (let i = 2; i < 27 && i < bytes.length; i++) {
           if (bytes[i] === 0) break;
@@ -114,38 +120,71 @@
         token = token.trim();
         if (!token) return;
 
-        // LTP
+        /* LTP */
         const ltp = readInt32(view, 43);
         if (!ltp) return;
 
         ltpCache[token] = ltp;
 
         /* ===============================
-           UPDATE TABLE LTP
+           UPDATE ROWS
         =============================== */
         document.querySelectorAll(`.ltp-cell[data-symboltoken="${token}"]`)
           .forEach(td => {
-            const span = td.querySelector('.ltp-value');
-            if (!span) return;
 
-            span.innerText = `₹${ltp.toFixed(2)}`;
+            const avg  = parseFloat(td.dataset.avgprice);
+            const qty  = parseFloat(td.dataset.quantity);
+            const prev = parseFloat(td.dataset.prevclose);
+
+            /* ---- LTP ---- */
+            const ltpEl = td.querySelector('.ltp-value');
+            if (ltpEl) {
+              ltpEl.innerText = `₹${ltp.toFixed(2)}`;
+            }
+
+            /* ---- TODAY % ---- */
+            const todayEl = td.querySelector('.ltp-today-percent');
+            if (todayEl && prev) {
+              const pct = ((ltp - prev) / prev) * 100;
+              todayEl.innerText = `${pct.toFixed(2)}%`;
+              todayEl.className =
+                `ltp-today-percent small ${pct >= 0 ? 'text-success' : 'text-danger'}`;
+            }
+
+            /* ---- P & L ---- */
+            const pnlTd = document.querySelector(
+              `.pnl-cell[data-symboltoken="${token}"]`
+            );
+
+            if (pnlTd && avg && qty) {
+              const pnl    = (ltp - avg) * qty;
+              const pnlPct = ((ltp - avg) / avg) * 100;
+
+              const pnlValEl = pnlTd.querySelector('.pnl-value');
+              const pnlPctEl = pnlTd.querySelector('.pnl-percent');
+
+              if (pnlValEl) pnlValEl.innerText = `₹${pnl.toFixed(2)}`;
+              if (pnlPctEl) pnlPctEl.innerText = `${pnlPct.toFixed(2)}%`;
+
+              const cls = pnl >= 0 ? 'text-success' : 'text-danger';
+              pnlValEl.className = `pnl-value fw-semibold ${cls}`;
+              pnlPctEl.className = `pnl-percent small ${cls}`;
+            }
           });
 
         /* ===============================
-           🔥 UPDATE MODAL LTP LIVE
+           MODAL LTP LIVE
         =============================== */
         if (activeToken && token === String(activeToken)) {
           const modalLtp = document.getElementById('om-ltp');
-          if (modalLtp) {
-            modalLtp.innerText = ltp.toFixed(2);
-          }
+          if (modalLtp) modalLtp.innerText = ltp.toFixed(2);
         }
       };
     });
 
-    /* =====================================================
-       ✅ MODAL OPEN FUNCTION (MISSING BEFORE)
-    ===================================================== */
+    /* ===============================
+       MODAL OPEN
+    =============================== */
     function openOrderModal(order, side = 'BUY') {
       activeToken = order.symboltoken;
 
@@ -158,17 +197,32 @@
       document.getElementById('om-qty').value =
         side === 'SELL' ? order.quantity : '';
 
+      const orderType = document.getElementById('om-ordertype').value;
+      const priceInput = document.getElementById('om-price');
+      const ltp = ltpCache[order.symboltoken];
+
+      // 🔥 MARKET ORDER → show LTP + disable
+      if (orderType === 'MARKET') {
+        priceInput.disabled = true;
+        priceInput.value = ltp ? ltp.toFixed(2) : '';
+        priceInput.placeholder = 'AT MARKET';
+      }
+      // 🔥 LIMIT ORDER → enable + prefill LTP
+      else {
+        priceInput.disabled = false;
+        priceInput.value = ltp ? ltp.toFixed(2) : '';
+      }
+
       document.getElementById('om-ltp').innerText =
-        ltpCache[order.symboltoken]
-          ? ltpCache[order.symboltoken].toFixed(2)
-          : '—';
+        ltp ? ltp.toFixed(2) : '—';
 
       new bootstrap.Modal(document.getElementById('orderModal')).show();
     }
 
-    /* =====================================================
+
+    /* ===============================
        ORDER TYPE CHANGE
-    ===================================================== */
+    =============================== */
     document.addEventListener('change', e => {
       if (e.target.id !== 'om-ordertype') return;
 
@@ -416,14 +470,9 @@
                 </td>
 
 
-                <!-- P&L -->
-                <td class="pnl-cell" data-symboltoken="{{ (string) $row['symboltoken'] }}">
-                  <span class="pnl-value fw-semibold {{ $row['profitandloss'] >= 0 ? 'text-success' : 'text-danger' }}">
-                    ₹{{ number_format($row['profitandloss'], 2) }}
-                  </span>
-                  <div class="pnl-percent small {{ $row['pnlpercentage'] >= 0 ? 'text-success' : 'text-danger' }}">
-                    {{ number_format($row['pnlpercentage'], 2) }}%
-                  </div>
+                <td class="pnl-cell" data-symboltoken="{{ $row['symboltoken'] }}">
+                  <span class="pnl-value fw-semibold">₹0.00</span>
+                  <div class="pnl-percent small">0.00%</div>
                 </td>
 
                 <!-- Actions -->
