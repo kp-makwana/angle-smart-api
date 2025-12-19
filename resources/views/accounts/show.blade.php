@@ -235,35 +235,72 @@
     function openOrderModal(order, side = 'BUY') {
       activeToken = order.symboltoken;
 
-      document.getElementById('om-symbol-token').value  = order.symboltoken;
+      /* HIDDEN FIELDS */
+      document.getElementById('om-symbol-token').value = order.symboltoken;
       document.getElementById('om-tradingsymbol').value = order.tradingsymbol;
       document.getElementById('om-transactiontype').value = side;
 
-      document.getElementById('om-symbol').value = order.tradingsymbol;
-      document.getElementById('om-side').value   = side;
-      document.getElementById('om-qty').value =
-        side === 'SELL' ? order.quantity : '';
+      /* HEADER */
+      document.getElementById('om-symbol').innerText = order.tradingsymbol;
 
+      const sideBadge = document.getElementById('om-side-badge');
+      sideBadge.innerText = side;
+      sideBadge.className = 'badge ' + (side === 'BUY' ? 'bg-success' : 'bg-danger');
+
+      /* BADGES */
+      document.getElementById('om-info-ordertype').innerText =
+        document.getElementById('om-ordertype').value;
+
+      document.getElementById('om-info-product').innerText = 'DELIVERY';
+      document.getElementById('om-info-duration').innerText = 'DAY';
+
+      /* PRICE CARDS */
+      document.getElementById('om-avgprice').innerText =
+        order.averageprice ? `₹${Number(order.averageprice).toFixed(2)}` : '—';
+
+      document.getElementById('om-availableqty').innerText =
+        order.quantity ?? '—';
+
+      /* LTP */
+      const ltp = ltpCache[order.symboltoken];
+      document.getElementById('om-ltp').innerText =
+        ltp ? ltp.toFixed(2) : '—';
+
+      /* CIRCUIT */
+      let limits = circuitCache[order.symboltoken];
+      if (!limits) limits = fallbackCircuit(order.close);
+
+      const circuitEl = document.getElementById('om-circuit');
+      circuitEl.innerText = limits
+        ? `₹${limits.lower} - ₹${limits.upper}`
+        : '—';
+
+      /* FORM RESET */
+      const qtyInput = document.getElementById('om-qty');
       const priceInput = document.getElementById('om-price');
-      const orderType  = document.getElementById('om-ordertype').value;
-      const ltp        = ltpCache[order.symboltoken];
+      const type = document.getElementById('om-ordertype').value;
 
-      /* MARKET */
-      if (orderType === 'MARKET') {
+      qtyInput.value = side === 'SELL' ? order.quantity : '';
+
+      qtyInput.classList.remove('is-invalid');
+      priceInput.classList.remove('is-invalid');
+      document.getElementById('om-qty-error').innerText = '';
+      document.getElementById('om-price-error').innerText = '';
+
+      if (type === 'MARKET') {
         priceInput.disabled = true;
-        priceInput.value = ltp ? ltp.toFixed(2) : '';
+        priceInput.value = '';
       } else {
         priceInput.disabled = false;
         priceInput.value = ltp ? ltp.toFixed(2) : '';
       }
 
-      const limits = circuitCache[order.symboltoken];
-      if (limits) {
-        priceInput.title = `LC ₹${limits.lower} | UC ₹${limits.upper}`;
-      }
-
-      document.getElementById('om-ltp').innerText =
-        ltp ? ltp.toFixed(2) : '—';
+      /* RESET SUBMIT BUTTON */
+      const btn = document.getElementById('om-submit-btn');
+      btn.disabled = false;
+      btn.querySelector('.btn-text').classList.remove('d-none');
+      btn.querySelector('.spinner-border').classList.add('d-none');
+      btn.querySelector('.btn-loading-text').classList.add('d-none');
 
       new bootstrap.Modal(document.getElementById('orderModal')).show();
     }
@@ -681,41 +718,95 @@
   <!-- Modal -->
   @include('_partials/_modals/modal-edit-user')
   <div class="modal fade" id="orderModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-simple">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-simple">
       <div class="modal-content">
-        <div class="modal-body">
+
+        <!-- HEADER -->
+        <div class="modal-header border-0 pb-0">
+          <div>
+            <h4 class="mb-1">
+              <span id="om-symbol" class="fw-bold"></span>
+              <span class="badge rounded-pill bg-label-primary ms-2"
+                    style="font-size:0.65rem;font-weight:500;">
+              NSE
+            </span>
+            </h4>
+
+            <!-- BADGES -->
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <span id="om-side-badge" class="badge"></span>
+              <span class="badge bg-label-primary" id="om-info-ordertype">
+              LIMIT
+            </span>
+
+              <span class="badge bg-label-success" id="om-info-product">
+              DELIVERY
+            </span>
+
+              <span class="badge bg-label-secondary" id="om-info-duration">
+              DAY
+            </span>
+            </div>
+          </div>
 
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
 
-          <h4 class="text-center mb-3" id="om-title">Place Order</h4>
+        <!-- BODY -->
+        <div class="modal-body pt-4">
 
+          <!-- PRICE CARDS -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <div class="border rounded p-3 text-center">
+                <small class="text-muted">Live Price</small>
+                <div class="fw-semibold fs-5">
+                  ₹ <span id="om-ltp">—</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="border rounded p-3 text-center">
+                <small class="text-muted">Avg Price</small>
+                <div class="fw-semibold fs-5" id="om-avgprice">—</div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="border rounded p-3 text-center">
+                <small class="text-muted">Available Qty</small>
+                <div class="fw-semibold fs-5" id="om-availableqty">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CIRCUIT ALERT -->
+          <div class="alert alert-info d-flex justify-content-between align-items-center mb-4"
+               id="om-circuit-alert">
+            <div>
+              <i class="ti tabler-info-circle me-1"></i>
+              <strong>Circuit Range</strong>
+            </div>
+            <span class="fw-semibold" id="om-circuit">—</span>
+          </div>
+
+          <!-- FORM -->
           <form id="orderForm"
                 method="POST"
                 action="{{ route('account.place.order', request('account')->id) }}"
-                class="row g-4">
+                class="row g-3">
 
             @csrf
 
-            <!-- REQUIRED HIDDEN FIELDS -->
+            <!-- REQUIRED HIDDEN -->
             <input type="hidden" name="symboltoken" id="om-symbol-token">
             <input type="hidden" name="tradingsymbol" id="om-tradingsymbol">
             <input type="hidden" name="transactiontype" id="om-transactiontype">
-            <input type="hidden" name="variety" id="om-variety" value="NORMAL">
             <input type="hidden" name="exchange" value="NSE">
             <input type="hidden" name="producttype" value="DELIVERY">
             <input type="hidden" name="duration" value="DAY">
-
-            <!-- SYMBOL -->
-            <div class="col-md-6">
-              <label class="form-label">Symbol</label>
-              <input type="text" class="form-control" id="om-symbol" readonly>
-            </div>
-
-            <!-- SIDE -->
-            <div class="col-md-6">
-              <label class="form-label">Side</label>
-              <input type="text" class="form-control" id="om-side" readonly>
-            </div>
+            <input type="hidden" name="variety" value="NORMAL">
 
             <!-- ORDER TYPE -->
             <div class="col-md-6">
@@ -729,46 +820,34 @@
             <!-- QUANTITY -->
             <div class="col-md-6">
               <label class="form-label">Quantity</label>
-              <input type="number" name="quantity" class="form-control" id="om-qty">
+              <input type="number" class="form-control" name="quantity" id="om-qty">
               <div class="invalid-feedback" id="om-qty-error"></div>
             </div>
 
             <!-- PRICE -->
             <div class="col-md-6">
               <label class="form-label">Price</label>
-              <input type="number" step="0.01" name="price" class="form-control" id="om-price">
+              <input type="number" step="0.05" class="form-control" name="price" id="om-price">
               <div class="invalid-feedback" id="om-price-error"></div>
             </div>
 
-            <!-- LIVE LTP -->
-            <div class="col-md-6">
-              <label class="form-label">Live Price</label>
-              <div class="form-control bg-light">
-                LTP ₹<span id="om-ltp">—</span>
-              </div>
-            </div>
-
-            <div class="col-12 text-center mt-3">
-              <button
-                type="submit"
-                class="btn btn-primary d-inline-flex align-items-center justify-content-center"
-                id="om-submit-btn"
-              >
-                <span class="btn-text">Submit Order</span>
-
-                <!-- Spinner -->
-                <span class="spinner-border spinner-border-sm d-none ms-2" role="status"></span>
-
-                <!-- Loading text -->
+            <!-- ACTIONS -->
+            <div class="col-12 text-center mt-4">
+              <button id="om-submit-btn"
+                      type="submit"
+                      class="btn btn-primary d-inline-flex align-items-center justify-content-center">
+                <span class="btn-text">Place Order</span>
+                <span class="spinner-border spinner-border-sm d-none ms-2"></span>
                 <span class="btn-loading-text d-none ms-2">Placing...</span>
               </button>
 
-              <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+              <button type="button"
+                      class="btn btn-label-secondary"
+                      data-bs-dismiss="modal">
                 Cancel
               </button>
             </div>
           </form>
-
         </div>
       </div>
     </div>
