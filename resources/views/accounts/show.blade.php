@@ -54,40 +54,37 @@
     });
   </script>
   <script>
-    /* =====================================================
-       CONFIG FROM BACKEND
-    ===================================================== */
     const clientCode = @json($account->client_id);
     const feedToken  = @json($account->feed_token);
     const apiKey     = @json($account->api_key);
     const tokens     = @json($tokens);
 
-    /* =====================================================
-       GLOBAL STATE
-    ===================================================== */
-    const ltpCellMap = {};     // token => td[]
-    const ltpCache   = {};     // token => ltp
-    let activeToken  = null;   // currently opened modal token
+    const ltpCellMap = {};   // token => [td, td]
+    const ltpCache   = {};   // token => ltp
+    let activeToken  = null;
 
-    /* =====================================================
-       DOM READY
-    ===================================================== */
+    function canRead(view, offset, size) {
+      return view.byteLength >= offset + size;
+    }
+
+    function readInt32(view, offset) {
+      return canRead(view, offset, 4)
+        ? view.getInt32(offset, true) / 100
+        : null;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
 
-      /* -----------------------------
-         MAP TABLE CELLS BY TOKEN
-      ----------------------------- */
       document.querySelectorAll('.ltp-cell').forEach(td => {
-        const token = td.dataset.token;
+        const token = td.dataset.symboltoken?.trim();
         if (!token) return;
 
-        if (!ltpCellMap[token]) ltpCellMap[token] = [];
+        if (!ltpCellMap[token]) {
+          ltpCellMap[token] = [];
+        }
         ltpCellMap[token].push(td);
       });
 
-      /* -----------------------------
-         SOCKET CONNECTION
-      ----------------------------- */
       const socket = new WebSocket(
         `wss://smartapisocket.angelone.in/smart-stream` +
         `?clientCode=${encodeURIComponent(clientCode)}` +
@@ -102,9 +99,9 @@
           correlationID: clientCode,
           action: 1,
           params: {
-            mode: 2, // QUOTE
+            mode: 2,
             tokenList: [{
-              exchangeType: 1, // NSE_CM
+              exchangeType: 1,
               tokens: tokens
             }]
           }
@@ -114,131 +111,71 @@
       socket.onmessage = (event) => {
         if (!(event.data instanceof ArrayBuffer)) return;
 
-        const view  = new DataView(event.data);
-        const bytes = new Uint8Array(event.data);
+        const buffer = event.data;
+        const view   = new DataView(buffer);
+        const bytes  = new Uint8Array(buffer);
 
-        // QUOTE MODE ONLY
-        if (view.getInt8(0) !== 2) return;
+        if (buffer.byteLength < 60) return;
 
-        /* -----------------------------
-           TOKEN (BYTE 2–26)
-        ----------------------------- */
-        let token = '';
-        for (let i = 2; i < 27; i++) {
+        const mode = view.getInt8(0);
+        if (mode !== 2) return;
+
+        let rawToken = '';
+        for (let i = 2; i < 27 && i < bytes.length; i++) {
           if (bytes[i] === 0) break;
-          token += String.fromCharCode(bytes[i]);
+          rawToken += String.fromCharCode(bytes[i]);
         }
 
-        /* -----------------------------
-           PRICES
-        ----------------------------- */
-        const ltp   = view.getInt32(43, true) / 100;
-        const close = Number(view.getBigInt64(115, true)) / 100;
+        const token = rawToken.trim();
+        if (!token) return;
 
-        if (!ltp || !close) return;
+        const ltp = readInt32(view, 43);
+        if (!ltp) return;
 
         ltpCache[token] = ltp;
 
-        const diff = ltp - close;
-        const pct  = (diff / close) * 100;
-        const cls  = diff >= 0 ? 'text-success' : 'text-danger';
-        const sign = diff >= 0 ? '+' : '';
+        const cells = ltpCellMap[token];
+        if (!cells) return;
 
-        /* -----------------------------
-           UPDATE TABLE CELLS
-        ----------------------------- */
-        (ltpCellMap[token] || []).forEach(td => {
+        cells.forEach(td => {
+          const span = td.querySelector('.ltp-value');
+          if (!span) return;
 
-          const orderType  = td.dataset.orderType;
-          const orderPrice = parseFloat(td.dataset.orderPrice || 0);
+          const oldPrice =
+            parseFloat(span.innerText.replace(/[₹,]/g, '')) || 0;
 
-          td.querySelector('.order-price').innerHTML =
-            orderType === 'market'
-              ? 'AT MARKET'
-              : `₹${orderPrice.toFixed(2)}`;
+          span.innerText = `₹${ltp.toFixed(2)}`;
 
-          td.querySelector('.ltp-live').innerHTML = `
-        LTP ₹${ltp.toFixed(2)}
-        <span class="${cls}">
-          (${sign}${pct.toFixed(2)}%)
-        </span>
-      `;
+          span.classList.remove('text-success', 'text-danger');
+          span.classList.add(
+            ltp >= oldPrice ? 'text-success' : 'text-danger'
+          );
         });
-
-        /* -----------------------------
-           UPDATE ACTIVE MODAL ONLY
-        ----------------------------- */
-        if (token === activeToken) {
-          const ltpSpan = document.getElementById('om-ltp');
-          if (ltpSpan) {
-            ltpSpan.innerText = ltp.toFixed(2);
-          }
-        }
       };
 
       socket.onerror = err => console.error('❌ Socket Error', err);
       socket.onclose = () => console.warn('⚠️ Socket Closed');
     });
 
-    /* =====================================================
-       OPEN COMMON ORDER MODAL
-    ===================================================== */
     function openOrderModal(order, side = 'BUY') {
-
       activeToken = order.symboltoken;
 
-      // Hidden fields
-      document.getElementById('om-symbol-token').value  = order.symboltoken;
+      document.getElementById('om-symbol-token').value = order.symboltoken;
       document.getElementById('om-tradingsymbol').value = order.tradingsymbol;
       document.getElementById('om-transactiontype').value = side;
-      document.getElementById('om-variety').value = order.variety || 'NORMAL';
 
-      // Visible fields
       document.getElementById('om-symbol').value = order.tradingsymbol;
-      document.getElementById('om-side').value   = side;
-      if(side !== 'BUY'){
-        document.getElementById('om-qty').value    = order.quantity || 1;
-      } else {
-        document.getElementById('om-qty').value    = '';
-      }
+      document.getElementById('om-side').value = side;
+      document.getElementById('om-qty').value =
+        side === 'SELL' ? order.quantity : '';
 
-      // Order type
-      const orderTypeSelect = document.getElementById('om-ordertype');
-      orderTypeSelect.value = order.ordertype || 'MARKET';
-
-      const priceInput = document.getElementById('om-price');
-
-      if (orderTypeSelect.value === 'MARKET') {
-        priceInput.value = '';
-        priceInput.disabled = true;
-        priceInput.placeholder = 'AT MARKET';
-      } else {
-        priceInput.disabled = false;
-        priceInput.value = order.price || '';
-      }
-
-      // LTP
       document.getElementById('om-ltp').innerText =
-        ltpCache[order.symboltoken]
-          ? ltpCache[order.symboltoken].toFixed(2)
-          : '—';
-
-      // UI style
-      document.getElementById('om-title').innerText =
-        side === 'SELL' ? 'Sell Order' : 'Buy / Modify Order';
-
-      const submitBtn = document.getElementById('om-submit-btn');
-      submitBtn.className = side === 'SELL'
-        ? 'btn btn-danger'
-        : 'btn btn-success';
+        ltpCache[order.symboltoken]?.toFixed(2) || '—';
 
       new bootstrap.Modal(document.getElementById('orderModal')).show();
     }
 
-    /* =====================================================
-       ORDER TYPE CHANGE (MARKET / LIMIT)
-    ===================================================== */
-    document.addEventListener('change', (e) => {
+    document.addEventListener('change', e => {
       if (e.target.id !== 'om-ordertype') return;
 
       const priceInput = document.getElementById('om-price');
@@ -246,16 +183,11 @@
       if (e.target.value === 'MARKET') {
         priceInput.value = '';
         priceInput.disabled = true;
-        priceInput.placeholder = 'AT MARKET';
-        return;
-      }
-
-      priceInput.disabled = false;
-      priceInput.placeholder = 'Enter limit price';
-
-      // Angel One behavior → autofill LTP
-      if (activeToken && ltpCache[activeToken]) {
-        priceInput.value = ltpCache[activeToken].toFixed(2);
+      } else {
+        priceInput.disabled = false;
+        if (activeToken && ltpCache[activeToken]) {
+          priceInput.value = ltpCache[activeToken].toFixed(2);
+        }
       }
     });
   </script>
@@ -473,8 +405,8 @@
                 </td>
 
                 <!-- LTP -->
-                <td>
-                  <span class="{{ $row['ltp'] > $row['averageprice'] ? 'text-success' : 'text-danger' }}">
+                <td class="ltp-cell" data-symboltoken="{{ (string) $row['symboltoken'] }}">
+                  <span class="ltp-value {{ $row['ltp'] > $row['averageprice'] ? 'text-success' : 'text-danger' }}">
                     ₹{{ number_format($row['ltp'], 2) }}
                   </span>
                 </td>
