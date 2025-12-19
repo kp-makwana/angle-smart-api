@@ -126,6 +126,14 @@ class AccountController extends Controller
 
   public function placeOrder(Request $request, Account $account)
   {
-    dd($request->all());
+    $payload = $request->all();
+    $response = $this->service->placeOrder($account,$payload);
+    $message = $response['message'];
+    if ($response['success']){
+      $flashType = 'success';
+    } else {
+      $flashType = 'error';
+    }
+    return redirect()->back()->with($flashType,$message);
   }
 }

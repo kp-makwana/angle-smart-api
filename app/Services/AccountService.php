@@ -203,4 +203,9 @@ class AccountService
   {
     return resolve(AngelService::class)->modifyOrder($account,$payload);
   }
+
+  public function placeOrder($account,$payload)
+  {
+    return resolve(AngelService::class)->placeOrder($account,$payload);
+  }
 }

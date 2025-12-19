@@ -495,4 +495,107 @@ class AngelService
       ];
     }
   }
+
+  public function placeOrder($account,$payload)
+  {
+    try {
+      $endpoint = $this->baseUrl . "/rest/secure/angelbroking/order/v1/placeOrder";
+
+      $headers = [
+        'Content-Type'      => 'application/json',
+        'Accept'            => 'application/json',
+        'X-UserType'        => 'USER',
+        'X-SourceID'        => 'WEB',
+        'X-ClientLocalIP'   => request()->ip(),
+        'X-ClientPublicIP'  => request()->ip(),
+        'X-MACAddress'      => '00:00:00:00:00:00',
+        'X-PrivateKey'      => $account->api_key,
+        'Authorization'     => 'Bearer ' . $account->session_token,
+      ];
+
+      /**
+       * Required payload structure
+       */
+      $requestPayload = [
+        'variety'         => 'NORMAL',
+        'tradingsymbol'  => $payload['tradingsymbol'],
+        'symboltoken'    => $payload['symboltoken'],
+        'exchange'       => $payload['exchange'] ?? 'NSE',
+        'transactiontype'=> strtoupper($payload['transactiontype']),
+        'ordertype'      => strtoupper($payload['ordertype']),
+        'producttype'    => $payload['producttype'] ?? 'DELIVERY',
+        'duration'       => 'DAY',
+        'scripconsent'   => 'YES',
+        'quantity'       => (int) $payload['quantity'],
+      ];
+
+      /**
+       * LIMIT order needs price
+       */
+      if ($requestPayload['ordertype'] === 'LIMIT') {
+        $requestPayload['price'] = (float) $payload['price'];
+      }
+
+      /**
+       * STOPLOSS (optional)
+       */
+      if (!empty($payload['triggerprice'])) {
+        $requestPayload['triggerprice'] = (float) $payload['triggerprice'];
+      }
+
+      $response = $this->client->post($endpoint, [
+        'headers' => $headers,
+        'json'    => $requestPayload,
+      ]);
+
+      $result = json_decode($response->getBody(), true);
+
+      /**
+       * SUCCESS
+       */
+      if (!empty($result['data'])) {
+        activity()
+          ->performedOn($account)
+          ->withProperties([
+            'orderid' => $result['data']['orderid'] ?? null,
+            'payload' => $requestPayload,
+          ])
+          ->log('Angel order placed');
+
+        return [
+          'success' => true,
+          'message' => 'Order placed successfully',
+          'data'    => $result['data'],
+        ];
+      }
+
+      /**
+       * TOKEN EXPIRED → REFRESH
+       */
+      if (($result['errorCode'] ?? null) === 'AG8001') {
+        $refresh = $this->generateTokens($account);
+        if ($refresh['success']) {
+          return $this->placeOrder($account, $payload);
+        }
+      }
+
+      return [
+        'success' => false,
+        'message' => $result['message'] ?? 'Order placement failed',
+        'errorCode' => $result['errorCode'] ?? null,
+      ];
+
+    } catch (\Exception $e) {
+      Log::error('Angel PlaceOrder Error', [
+        'error' => $e->getMessage(),
+        'line'  => $e->getLine(),
+        'payload' => $payload,
+      ]);
+
+      return [
+        'success' => false,
+        'message' => $e->getMessage(),
+      ];
+    }
+  }
 }

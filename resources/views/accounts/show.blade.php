@@ -199,7 +199,7 @@
       if(side !== 'BUY'){
         document.getElementById('om-qty').value    = order.quantity || 1;
       } else {
-        document.getElementById('om-qty').value    = 0;
+        document.getElementById('om-qty').value    = '';
       }
 
       // Order type
