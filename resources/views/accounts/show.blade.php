@@ -141,16 +141,22 @@
           const span = td.querySelector('.ltp-value');
           if (!span) return;
 
-          const oldPrice =
-            parseFloat(span.innerText.replace(/[₹,]/g, '')) || 0;
+            const oldPrice =
+              parseFloat(span.innerText.replace(/[₹,]/g, '')) || 0;
 
-          span.innerText = `₹${ltp.toFixed(2)}`;
+            span.innerText = `₹${ltp.toFixed(2)}`;
 
           span.classList.remove('text-success', 'text-danger');
           span.classList.add(
             ltp >= oldPrice ? 'text-success' : 'text-danger'
           );
         });
+        if (activeToken && token === String(activeToken)) {
+          const modalLtpSpan = document.getElementById('om-ltp');
+          if (modalLtpSpan) {
+            modalLtpSpan.innerText = ltp.toFixed(2);
+          }
+        }
       };
 
       socket.onerror = err => console.error('❌ Socket Error', err);
