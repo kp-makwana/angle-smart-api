@@ -280,7 +280,7 @@
       const priceInput = document.getElementById('om-price');
       const type = document.getElementById('om-ordertype').value;
 
-      qtyInput.value = side === 'SELL' ? order.quantity : '';
+      qtyInput.value = type === 'MARKET' ? 0 : (side === 'SELL' ? order.quantity : '');
 
       qtyInput.classList.remove('is-invalid');
       priceInput.classList.remove('is-invalid');
@@ -288,10 +288,12 @@
       document.getElementById('om-price-error').innerText = '';
 
       if (type === 'MARKET') {
-        priceInput.disabled = true;
         priceInput.value = '';
+        priceInput.disabled = true;
+        priceInput.placeholder = 'AT MARKET';
       } else {
         priceInput.disabled = false;
+        priceInput.placeholder = 'Enter price';
         priceInput.value = ltp ? ltp.toFixed(2) : '';
       }
 
@@ -781,16 +783,6 @@
             </div>
           </div>
 
-          <!-- CIRCUIT ALERT -->
-          <div class="alert alert-info d-flex justify-content-between align-items-center mb-4"
-               id="om-circuit-alert">
-            <div>
-              <i class="ti tabler-info-circle me-1"></i>
-              <strong>Circuit Range</strong>
-            </div>
-            <span class="fw-semibold" id="om-circuit">—</span>
-          </div>
-
           <!-- FORM -->
           <form id="orderForm"
                 method="POST"
@@ -829,6 +821,22 @@
               <label class="form-label">Price</label>
               <input type="number" step="0.05" class="form-control" name="price" id="om-price">
               <div class="invalid-feedback" id="om-price-error"></div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Circuit</label>
+
+              <div class="alert alert-info d-flex justify-content-between align-items-center py-2 mb-0"
+                   id="om-circuit-alert"
+                   style="height:38px">
+
+                <div class="d-flex align-items-center">
+                  <i class="ti tabler-info-circle me-1"></i>
+                  <span class="fw-semibold small">Range</span>
+                </div>
+
+                <span class="fw-semibold small" id="om-circuit">—</span>
+              </div>
             </div>
 
             <!-- ACTIONS -->
