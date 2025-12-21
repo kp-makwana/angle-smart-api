@@ -40,7 +40,7 @@
 
             {{-- Nickname --}}
             <div class="col-md-6">
-              <label class="form-label">Nickname *</label>
+              <label class="form-label">Nickname <span class="text-danger">*</span></label>
               <input type="text"
                      name="nickname"
                      class="form-control @error('nickname') is-invalid @enderror"
@@ -119,9 +119,33 @@
 
             {{-- API Key --}}
             <div class="col-md-6">
-              <label class="form-label" for="api_key">
-                API Key <span class="text-danger">*</span>
-              </label>
+              <div class="d-flex justify-content-between align-items-center">
+                <label class="form-label mb-0" for="api_key">
+                  API Key <span class="text-danger">*</span>
+                </label>
+
+                <div class="small">
+                  <a
+                    href="https://smartapi.angelbroking.com/signup"
+                    target="_blank"
+                    class="text-primary text-decoration-none"
+                    title="Create a new account and generate your API key"
+                  >
+                    New Signup
+                  </a>
+
+                  <span class="mx-1 text-muted">|</span>
+
+                  <a
+                    href="https://smartapi.angelbroking.com/signin#"
+                    target="_blank"
+                    class="text-primary text-decoration-none"
+                    title="Login to your Angel One account to view or regenerate your API key"
+                  >
+                    Existing User
+                  </a>
+                </div>
+              </div>
 
               <div class="input-group input-group-merge">
                 <input
@@ -151,10 +175,18 @@
 
             {{-- TOTP Secret --}}
             <div class="col-md-6">
-              <label class="form-label" for="totp_secret">
-                TOTP Secret <span class="text-danger">*</span>
-              </label>
-
+              <div class="d-flex justify-content-between align-items-center">
+                <label class="form-label" for="totp_secret">
+                  TOTP Secret <span class="text-danger">*</span>
+                </label>
+                <a
+                  href="https://smartapi.angelbroking.com/enable-totp"
+                  target="_blank"
+                  class="small text-primary text-decoration-none"
+                >
+                  Enable TOTP & Generate secrete
+                </a>
+              </div>
               <div class="input-group input-group-merge">
                 <input
                   type="text"
@@ -167,13 +199,13 @@
                 />
 
                 <span class="input-group-text cursor-pointer">
-      <i
-        class="icon-base ti tabler-help-circle text-body-secondary"
-        data-bs-toggle="tooltip"
-        data-bs-placement="top"
-        title="Enter the TOTP secret from AngleOne used to generate time-based OTPs"
-      ></i>
-    </span>
+                  <i
+                    class="icon-base ti tabler-help-circle text-body-secondary"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Enter the TOTP secret from AngleOne used to generate time-based OTPs"
+                  ></i>
+                </span>
               </div>
 
               @error('totp_secret')
@@ -184,9 +216,18 @@
 
             {{-- Client Secret (Optional) --}}
             <div class="col-md-6">
-              <label class="form-label" for="client_secret">
-                Client Secret <span class="text-muted">(optional)</span>
-              </label>
+              <div class="d-flex justify-content-between align-items-center">
+                <label class="form-label" for="client_secret">
+                  Client Secret <span class="text-muted">(optional)</span>
+                </label>
+                <a
+                  href="https://smartapi.angelbroking.com/apps"
+                  target="_blank"
+                  class="small text-primary text-decoration-none"
+                >
+                  Get Client Secrete
+                </a>
+              </div>
 
               <div class="input-group input-group-merge">
                 <input
