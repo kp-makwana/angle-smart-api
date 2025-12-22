@@ -117,6 +117,46 @@
             </div>
 
 
+            {{-- TOTP Secret --}}
+            <div class="col-md-6">
+              <div class="d-flex justify-content-between align-items-center">
+                <label class="form-label" for="totp_secret">
+                  TOTP Secret <span class="text-danger">*</span>
+                </label>
+                <a
+                  href="https://smartapi.angelbroking.com/enable-totp"
+                  target="_blank"
+                  class="small text-primary text-decoration-none"
+                >
+                  Enable TOTP & Generate secrete
+                </a>
+              </div>
+              <div class="input-group input-group-merge">
+                <input
+                  type="text"
+                  id="totp_secret"
+                  name="totp_secret"
+                  class="form-control @error('totp_secret') is-invalid @enderror"
+                  value="{{ old('totp_secret') }}"
+                  placeholder="Enter AngleOne TOTP secret"
+                  autocomplete="off"
+                />
+
+                <span class="input-group-text cursor-pointer">
+                  <i
+                    class="icon-base ti tabler-help-circle text-body-secondary"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Enter the TOTP secret from AngleOne used to generate time-based OTPs"
+                  ></i>
+                </span>
+              </div>
+
+              @error('totp_secret')
+              <div class="invalid-feedback d-block">{{ $message }}</div>
+              @enderror
+            </div>
+
             {{-- API Key --}}
             <div class="col-md-6">
               <div class="d-flex justify-content-between align-items-center">
@@ -172,47 +212,6 @@
               <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror
             </div>
-
-            {{-- TOTP Secret --}}
-            <div class="col-md-6">
-              <div class="d-flex justify-content-between align-items-center">
-                <label class="form-label" for="totp_secret">
-                  TOTP Secret <span class="text-danger">*</span>
-                </label>
-                <a
-                  href="https://smartapi.angelbroking.com/enable-totp"
-                  target="_blank"
-                  class="small text-primary text-decoration-none"
-                >
-                  Enable TOTP & Generate secrete
-                </a>
-              </div>
-              <div class="input-group input-group-merge">
-                <input
-                  type="text"
-                  id="totp_secret"
-                  name="totp_secret"
-                  class="form-control @error('totp_secret') is-invalid @enderror"
-                  value="{{ old('totp_secret') }}"
-                  placeholder="Enter AngleOne TOTP secret"
-                  autocomplete="off"
-                />
-
-                <span class="input-group-text cursor-pointer">
-                  <i
-                    class="icon-base ti tabler-help-circle text-body-secondary"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Enter the TOTP secret from AngleOne used to generate time-based OTPs"
-                  ></i>
-                </span>
-              </div>
-
-              @error('totp_secret')
-              <div class="invalid-feedback d-block">{{ $message }}</div>
-              @enderror
-            </div>
-
 
             {{-- Client Secret (Optional) --}}
             <div class="col-md-6">
