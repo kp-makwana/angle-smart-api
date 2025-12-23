@@ -180,6 +180,15 @@
           if (fb) circuitCache[token] = fb;
         }
 
+        document
+          .querySelectorAll(`.ltp-cell[data-token="${token}"]`)
+          .forEach(cell => {
+            const ltpEl = cell.querySelector('.ltp-live');
+            if (ltpEl) {
+              ltpEl.innerText = `LTP ₹${ltp.toFixed(2)}`;
+            }
+          });
+
         /* LIVE UPDATE INSIDE MODIFY MODAL */
         if (token === activeModifyToken) {
 
