@@ -248,7 +248,7 @@ $activeClass = in_array($currentRouteName, $activeRoutes) ? 'active' : '';
       <!-- Menu wrapper: End -->
       <!-- Toolbar: Start -->
       <ul class="navbar-nav flex-row align-items-center ms-auto">
-        @if ($configData['hasCustomizer'] == true)
+        @if ($configData['hasCustomizer'])
         <!-- Style Switcher -->
         <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-1">
           <a class="nav-link dropdown-toggle hide-arrow" id="nav-theme" href="javascript:void(0);"
@@ -285,7 +285,7 @@ $activeClass = in_array($currentRouteName, $activeRoutes) ? 'active' : '';
           {{-- If user is NOT logged in, show Login/Register button --}}
           @guest
             <li>
-              <a href="{{ url('/auth/login-cover') }}" class="btn btn-primary" target="_blank">
+              <a href="{{ url('/login') }}" class="btn btn-primary">
                 <span class="icon-base ti tabler-login scaleX-n1-rtl me-md-1"></span>
                 <span class="d-none d-md-block">Login/Register</span>
               </a>

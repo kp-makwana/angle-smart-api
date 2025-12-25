@@ -619,7 +619,7 @@
                 </ul>
 
                 <div class="d-grid mt-8">
-                  <a href="{{ url('/front-pages/payment') }}" class="btn btn-label-primary">Get Started</a>
+                  <a href="#" class="btn btn-label-primary">Get Started</a>
                 </div>
               </div>
             </div>
@@ -659,7 +659,7 @@
                 </ul>
 
                 <div class="d-grid mt-8">
-                  <a href="{{ url('/front-pages/payment') }}" class="btn btn-primary">Get Started</a>
+                  <a href="#" class="btn btn-primary">Get Started</a>
                 </div>
               </div>
             </div>
@@ -698,7 +698,7 @@
                 </ul>
 
                 <div class="d-grid mt-8">
-                  <a href="{{ url('/front-pages/payment') }}" class="btn btn-label-primary">Get Started</a>
+                  <a href="#" class="btn btn-label-primary">Get Started</a>
                 </div>
               </div>
             </div>
@@ -1002,7 +1002,7 @@
             <h5 class="text-body mb-8">
               Track holdings, performance, and insights across brokers — securely and effortlessly.
             </h5>
-            <a href="{{ url('/front-pages/payment') }}" class="btn btn-lg btn-primary">
+            <a href="#" class="btn btn-lg btn-primary">
               Start Free Trial
             </a>
           </div>
