@@ -56,12 +56,9 @@
       </nav>
 
       <div class="d-flex gap-2">
-        <!-- Add New -->
-        <a href="{{ route('accounts.create') }}">
-          <button class="btn btn-primary">
-            <i class="ti tabler-plus icon-sm"></i> Add New Account
-          </button>
-        </a>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAngleOneAccount">
+          <i class="ti tabler-plus icon-sm"></i> Add New Account
+        </button>
       </div>
     </div>
 
@@ -230,6 +227,8 @@
       </div>
     @endif
   </div>
+
+  @include('components.add-accounts')
 
   <!-- DataTable with Buttons -->
   <style>
