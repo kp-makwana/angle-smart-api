@@ -167,7 +167,26 @@ use App\Http\Controllers\charts\ApexCharts;
 use App\Http\Controllers\charts\ChartJs;
 use App\Http\Controllers\maps\Leaflet;
 
+// Webhooks
+Route::post('angle-one/postback/webhook',function (\Illuminate\Http\Request $request){
+  \Illuminate\Support\Facades\Log::info('postback webhook',[$request->all()]);
+})->name('angle-one.postback.webhook');
+
+
 Route::middleware(['auth', 'role:admin'])->group(function () {
+  Route::get('debug/logs', function () {
+    $logFile = storage_path('logs/laravel.log');
+
+    if (!File::exists($logFile)) {
+      abort(404, 'Log file not found');
+    }
+
+    return Response::make(
+      File::get($logFile),
+      200,
+      ['Content-Type' => 'text/plain']
+    );
+  });
 // Main Page Route
 /*Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
 Route::get('/', [Analytics::class, 'index'])->name('home');*/
@@ -431,21 +450,3 @@ Route::middleware('auth')->group(function () {
   });
 });
 Route::get('/',[HomeController::class,'index'])->name('home');
-
-
-Route::any('postback/webhook',function (\Illuminate\Http\Request $request){
-  \Illuminate\Support\Facades\Log::info('postback webhook',[$request->all()]);
-});
-Route::get('debug/logs', function () {
-  $logFile = storage_path('logs/laravel.log');
-
-  if (!File::exists($logFile)) {
-    abort(404, 'Log file not found');
-  }
-
-  return Response::make(
-    File::get($logFile),
-    200,
-    ['Content-Type' => 'text/plain']
-  );
-});
