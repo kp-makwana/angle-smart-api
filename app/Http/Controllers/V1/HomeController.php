@@ -12,7 +12,7 @@ class HomeController extends Controller
   {
     $pageConfigs = ['myLayout' => 'horizontal'];
 
-    return view('content.dashboard.dashboards-analytics',['pageConfigs'=> $pageConfigs]);
+    return view('dashboard.dashboard',['pageConfigs'=> $pageConfigs]);
   }
   public function index()
   {
