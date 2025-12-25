@@ -550,266 +550,160 @@
         <div class="text-center mb-4">
           <span class="badge bg-label-primary">Pricing Plans</span>
         </div>
+
         <h4 class="text-center mb-1">
-        <span class="position-relative fw-extrabold z-1">Tailored pricing plans
-          <img src="{{ asset('assets/img/front-pages/icons/section-title-icon.png') }}" alt="laptop charging"
-               class="section-title-img position-absolute object-fit-contain bottom-0 z-n1" />
-        </span>
-          designed for you
+      <span class="position-relative fw-extrabold z-1">
+        Account-based pricing plans
+        <img src="{{ asset('assets/img/front-pages/icons/section-title-icon.png') }}" alt="section title icon"
+             class="section-title-img position-absolute object-fit-contain bottom-0 z-n1" />
+      </span>
+          built to scale with you
         </h4>
-        <p class="text-center pb-2 mb-7">All plans include 40+ advanced tools and features to boost your
-          product.<br />Choose the best plan to fit your needs.</p>
+
+        <p class="text-center pb-2 mb-7">
+          Pricing is based on the number of accounts you manage.<br />
+          Switch plans anytime as your needs grow.
+        </p>
+
         <div class="text-center mb-12">
           <div class="position-relative d-inline-block pt-3 pt-md-0">
             <label class="switch switch-sm switch-primary me-0">
-              <span class="switch-label fs-6 text-body me-3">Pay Monthly</span>
+              <span class="switch-label fs-6 text-body me-3">Monthly Billing</span>
               <input type="checkbox" class="switch-input price-duration-toggler" checked />
               <span class="switch-toggle-slider">
-              <span class="switch-on"></span>
-              <span class="switch-off"></span>
-            </span>
-              <span class="switch-label fs-6 text-body ms-3">Pay Annual</span>
+            <span class="switch-on"></span>
+            <span class="switch-off"></span>
+          </span>
+              <span class="switch-label fs-6 text-body ms-3">Annual Billing</span>
             </label>
             <div class="pricing-plans-item position-absolute d-flex">
               <img src="{{ asset('assets/img/front-pages/icons/pricing-plans-arrow.png') }}" alt="pricing plans arrow"
                    class="scaleX-n1-rtl" />
-              <span class="fw-medium mt-2 ms-1"> Save 25%</span>
+              <span class="fw-medium mt-2 ms-1">Save 25%</span>
             </div>
           </div>
         </div>
+
         <div class="row g-6 pt-lg-5">
-          <!-- Basic Plan: Start -->
+
+          <!-- Retail Plan -->
           <div class="col-xl-4 col-lg-6">
             <div class="card">
               <div class="card-header">
                 <div class="text-center">
-                  <img src="{{ asset('assets/img/front-pages/icons/paper-airplane.png') }}" alt="paper airplane icon"
+                  <img src="{{ asset('assets/img/front-pages/icons/paper-airplane.png') }}" alt="retail plan icon"
                        class="mb-8 pb-2" />
-                  <h4 class="mb-0">Basic</h4>
+                  <h4 class="mb-0">Retail</h4>
+
                   <div class="d-flex align-items-center justify-content-center">
-                    <span class="price-monthly h2 text-primary fw-extrabold mb-0">$19</span>
-                    <span class="price-yearly h2 text-primary fw-extrabold mb-0 d-none">$14</span>
+                    <span class="price-monthly h2 text-primary fw-extrabold mb-0">₹19</span>
+                    <span class="price-yearly h2 text-primary fw-extrabold mb-0 d-none">₹149</span>
                     <sub class="h6 text-body-secondary mb-n1 ms-1">/mo</sub>
                   </div>
+
                   <div class="position-relative pt-2">
-                    <div class="price-yearly text-body-secondary price-yearly-toggle d-none">$ 168 / year</div>
+                    <div class="price-yearly text-body-secondary price-yearly-toggle d-none">
+                      ₹149 / year
+                    </div>
                   </div>
                 </div>
               </div>
+
               <div class="card-body">
                 <ul class="list-unstyled pricing-list">
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Timeline
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Basic search
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Live chat widget
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Email marketing
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Custom Forms
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Traffic analytics
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Basic Support
-                    </h6>
-                  </li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Up to 10 accounts</h6></li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Account management</h6></li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Basic analytics & reporting</h6></li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Live chat widget</h6></li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Email support</h6></li>
                 </ul>
+
                 <div class="d-grid mt-8">
                   <a href="{{ url('/front-pages/payment') }}" class="btn btn-label-primary">Get Started</a>
                 </div>
               </div>
             </div>
           </div>
-          <!-- Basic Plan: End -->
 
-          <!-- Favourite Plan: Start -->
+          <!-- Pro Investor Plan -->
           <div class="col-xl-4 col-lg-6">
             <div class="card border border-primary shadow-xl">
               <div class="card-header">
                 <div class="text-center">
-                  <img src="{{ asset('assets/img/front-pages/icons/plane.png') }}" alt="plane icon" class="mb-8 pb-2" />
-                  <h4 class="mb-0">Team</h4>
+                  <img src="{{ asset('assets/img/front-pages/icons/plane.png') }}" alt="pro investor plan icon"
+                       class="mb-8 pb-2" />
+                  <h4 class="mb-0">Pro Investor</h4>
+
                   <div class="d-flex align-items-center justify-content-center">
-                    <span class="price-monthly h2 text-primary fw-extrabold mb-0">$29</span>
-                    <span class="price-yearly h2 text-primary fw-extrabold mb-0 d-none">$22</span>
+                    <span class="price-monthly h2 text-primary fw-extrabold mb-0">₹49</span>
+                    <span class="price-yearly h2 text-primary fw-extrabold mb-0 d-none">₹499</span>
                     <sub class="h6 text-body-secondary mb-n1 ms-1">/mo</sub>
                   </div>
+
                   <div class="position-relative pt-2">
-                    <div class="price-yearly text-body-secondary price-yearly-toggle d-none">$ 264 / year</div>
+                    <div class="price-yearly text-body-secondary price-yearly-toggle d-none">
+                      ₹499 / year
+                    </div>
                   </div>
+
                 </div>
               </div>
+
               <div class="card-body">
                 <ul class="list-unstyled pricing-list">
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Everything in basic
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Timeline with database
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Advanced search
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Marketing automation
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Advanced chatbot
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Campaign management
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Collaboration tools
-                    </h6>
-                  </li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Up to 50 accounts</h6></li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Everything in Retail</h6></li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Advanced analytics</h6></li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Priority support</h6></li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Team collaboration tools</h6></li>
                 </ul>
+
                 <div class="d-grid mt-8">
                   <a href="{{ url('/front-pages/payment') }}" class="btn btn-primary">Get Started</a>
                 </div>
               </div>
             </div>
           </div>
-          <!-- Favourite Plan: End -->
 
-          <!-- Standard Plan: Start -->
+          <!-- Advisor Plan -->
           <div class="col-xl-4 col-lg-6">
             <div class="card">
               <div class="card-header">
                 <div class="text-center">
-                  <img src="{{ asset('assets/img/front-pages/icons/shuttle-rocket.png') }}" alt="shuttle rocket icon"
+                  <img src="{{ asset('assets/img/front-pages/icons/shuttle-rocket.png') }}" alt="advisor plan icon"
                        class="mb-8 pb-2" />
-                  <h4 class="mb-0">Enterprise</h4>
+                  <h4 class="mb-0">Advisor</h4>
+
                   <div class="d-flex align-items-center justify-content-center">
-                    <span class="price-monthly h2 text-primary fw-extrabold mb-0">$49</span>
-                    <span class="price-yearly h2 text-primary fw-extrabold mb-0 d-none">$37</span>
+                    <span class="price-monthly h2 text-primary fw-extrabold mb-0">₹99</span>
+                    <span class="price-yearly h2 text-primary fw-extrabold mb-0 d-none">₹999</span>
                     <sub class="h6 text-body-secondary mb-n1 ms-1">/mo</sub>
                   </div>
+
                   <div class="position-relative pt-2">
-                    <div class="price-yearly text-body-secondary price-yearly-toggle d-none">$ 444 / year</div>
+                    <div class="price-yearly text-body-secondary price-yearly-toggle d-none">
+                      ₹999 / year
+                    </div>
                   </div>
                 </div>
               </div>
+
               <div class="card-body">
                 <ul class="list-unstyled pricing-list">
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Everything in premium
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Timeline with database
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Fuzzy search
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      A/B testing sanbox
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Custom permissions
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Social media automation
-                    </h6>
-                  </li>
-                  <li>
-                    <h6 class="d-flex align-items-center mb-3">
-                    <span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i
-                        class="icon-base ti tabler-check icon-12px"></i></span>
-                      Sales automation tools
-                    </h6>
-                  </li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Unlimited accounts</h6></li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Everything in Pro Investor</h6></li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Unlimited account management</h6></li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Dedicated priority support</h6></li>
+                  <li><h6 class="d-flex align-items-center mb-3"><span class="badge badge-center rounded-pill bg-label-primary p-0 me-3"><i class="icon-base ti tabler-check icon-12px"></i></span>Custom integrations</h6></li>
                 </ul>
+
                 <div class="d-grid mt-8">
                   <a href="{{ url('/front-pages/payment') }}" class="btn btn-label-primary">Get Started</a>
                 </div>
               </div>
             </div>
           </div>
-          <!-- Standard Plan: End -->
+
         </div>
       </div>
     </section>
