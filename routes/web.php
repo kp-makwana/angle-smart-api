@@ -167,7 +167,7 @@ use App\Http\Controllers\charts\ApexCharts;
 use App\Http\Controllers\charts\ChartJs;
 use App\Http\Controllers\maps\Leaflet;
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
 // Main Page Route
 /*Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
 Route::get('/', [Analytics::class, 'index'])->name('home');*/
