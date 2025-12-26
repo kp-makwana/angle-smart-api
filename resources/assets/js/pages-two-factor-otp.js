@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
      RESEND OTP COUNTDOWN (FIXED)
   =============================== */
 
-  const RESEND_TIME = 60;
+  const RESEND_TIME = 30;
 
   document.querySelectorAll('.resend-btn').forEach(btn => {
 

@@ -56,7 +56,7 @@ class AngleOneAccount extends Controller
   {
     $this->authorize('update', $account);
     $response = $this->service->emailOtpResend($account);
-    if (!$response['success']) {
+    if (!$response['status']) {
         Session::flash('error', $response['message']);
         return $this->errorResponse($response['message']);
     }
@@ -67,7 +67,7 @@ class AngleOneAccount extends Controller
   {
     $this->authorize('update', $account);
     $response = $this->service->mobileOtpResend($account);
-    if (!$response['success']) {
+    if (!$response['status']) {
       Session::flash('error', $response['message']);
       return $this->errorResponse($response['message']);
     }
