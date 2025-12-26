@@ -105,4 +105,22 @@ class AngelSmartApiService
 
     return json_decode($response->getBody(), true);
   }
+
+  public function generateTOTP(string $clientCode, string $pin): array
+  {
+    $payload = [
+      'clientcode' => $clientCode,
+      'password'   => $pin,
+    ];
+
+    $response = $this->client->post(
+      $this->baseUrl . '/rest/auth/angelbroking/user/v1/totp/login',
+      [
+        'headers' => $this->getHeaders(),
+        'json'    => $payload,
+      ]
+    );
+
+    return json_decode($response->getBody(), true);
+  }
 }

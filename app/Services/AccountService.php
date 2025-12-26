@@ -273,4 +273,17 @@ class AccountService
     }
     return ['success' => false,'error' => 'Account not yet processed'];
   }
+
+  public function generateTOTP($account,$validated)
+  {
+    return resolve(AngelSmartApiService::class)->generateTOTP($account->client_id,$validated['pin']);
+  }
+
+  public function createStepFour($account)
+  {
+    if ($account->status == Account::STATUS_SIGNUP_SUCCESS) {
+      return ['success' => true,'account' => $account];
+    }
+    return ['success' => false,'error' => 'Account not yet processed'];
+  }
 }

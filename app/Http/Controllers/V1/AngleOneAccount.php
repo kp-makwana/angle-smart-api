@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Accounts\AngleOneAccountCreateRequest;
 use App\Http\Requests\V1\Accounts\OTPValidateRequest;
+use App\Http\Requests\V1\Accounts\PinValidationRequest;
 use App\Models\V1\Account;
 use App\Services\AccountService;
 use Illuminate\Http\Request;
@@ -78,8 +79,8 @@ class AngleOneAccount extends Controller
 
   public function submitStepTwo(OTPValidateRequest $request,Account $account)
   {
-    $validated = $request->validated();
     $this->authorize('update', $account);
+    $validated = $request->validated();
     $response = $this->service->submitStepTwo($account,$validated);
     $email = $response['email'];
     $mobile = $response['mobile'];
@@ -92,8 +93,9 @@ class AngleOneAccount extends Controller
     if (! empty($errors)) {
       throw ValidationException::withMessages($errors);
     }
-    Session::flash('success', 'OTP verified successfully');
-    return redirect()->route('angle-one.create.step.three', ['account' => $account->id]);
+    return redirect()
+      ->route('angle-one.create.step.three', ['account' => $account->id])
+      ->with('success', 'OTP verified successfully');
   }
 
   public function createStepThree(Account $account)
@@ -108,8 +110,32 @@ class AngleOneAccount extends Controller
     return view('angle-one-account.create-step-three',compact('account','pageConfigs'));
   }
 
-  public function submitStepThree(Request $request)
+  public function submitStepThree(PinValidationRequest $request,Account $account)
   {
-    dd($request->all());
+    $this->authorize('update', $account);
+    $validated = $request->validated();
+    $response = $this->service->generateTOTP($account,$validated);
+    if (!$response['status']){
+      $message = $response['message'];
+      Session::flash('error',$message);
+      $errors['pin'] = $message;
+      throw ValidationException::withMessages($errors);
+    }
+    return redirect()->route('angle-one.create.step.four',$account->id)->with('success','OTP Sent successfully');
+  }
+
+  public function createStepFour(Account $account)
+  {
+    $response = $this->service->createStepFour($account);
+    if (!$response['success']) {
+      Session::flash('error','Account not yet processed');
+      return redirect()->back();
+    }
+    return view('angle-one-account.create-step-four',compact('account'));
+  }
+
+  public function submitStepFour(Account $account)
+  {
+
   }
 }
