@@ -265,4 +265,12 @@ class AccountService
       'mobile' => $mobileValidateResponse,
     ];
   }
+
+  public function createStepThree($account)
+  {
+    if ($account->status == Account::STATUS_SIGNUP_SUCCESS) {
+      return ['success' => true,'account' => $account];
+    }
+    return ['success' => false,'error' => 'Account not yet processed'];
+  }
 }

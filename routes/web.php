@@ -465,6 +465,7 @@ Route::middleware('auth')->group(function () {
 
     // Step 3
     Route::get('account/step-three/{account}', [AngleOneAccount::class, 'createStepThree'])->name('create.step.three');
+    Route::post('account/step-three/{account}', [AngleOneAccount::class, 'submitStepThree'])->name('submit.step.three');
   });
 });
 

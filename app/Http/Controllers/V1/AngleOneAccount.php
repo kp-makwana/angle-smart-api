@@ -7,6 +7,7 @@ use App\Http\Requests\V1\Accounts\AngleOneAccountCreateRequest;
 use App\Http\Requests\V1\Accounts\OTPValidateRequest;
 use App\Models\V1\Account;
 use App\Services\AccountService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
@@ -95,8 +96,20 @@ class AngleOneAccount extends Controller
     return redirect()->route('angle-one.create.step.three', ['account' => $account->id]);
   }
 
-  public function createStepThree()
+  public function createStepThree(Account $account)
   {
+    $this->authorize('update', $account);
+    $response = $this->service->createStepThree($account);
+    if (!$response['success']) {
+      Session::flash('error','Account not yet processed');
+      return redirect()->back();
+    }
+    $pageConfigs = ['myLayout' => 'horizontal'];
+    return view('angle-one-account.create-step-three',compact('account','pageConfigs'));
+  }
 
+  public function submitStepThree(Request $request)
+  {
+    dd($request->all());
   }
 }
