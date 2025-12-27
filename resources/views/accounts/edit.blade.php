@@ -150,7 +150,7 @@
             @csrf
             @method('PUT')
 
-            {{-- FILE INPUT MOVED INSIDE FORM (CRITICAL FIX) --}}
+            {{-- Hidden Profile Image --}}
             <input
               type="file"
               id="upload"
@@ -164,13 +164,27 @@
 
               {{-- Nickname --}}
               <div class="col-md-6">
-                <label class="form-label">Nickname <span class="text-danger">*</span></label>
-                <input
-                  type="text"
-                  name="nickname"
-                  class="form-control @error('nickname') is-invalid @enderror"
-                  value="{{ old('nickname', $account->nickname) }}"
-                />
+                <label class="form-label">
+                  Nickname <span class="text-danger">*</span>
+                </label>
+
+                <div class="input-group input-group-merge">
+                  <input
+                    type="text"
+                    name="nickname"
+                    class="form-control @error('nickname') is-invalid @enderror"
+                    value="{{ old('nickname', $account->nickname) }}"
+                    placeholder="Account Holder Nickname"
+                  />
+                  <span class="input-group-text cursor-pointer">
+                    <i
+                      class="icon-base ti tabler-help-circle text-body-secondary"
+                      data-bs-toggle="tooltip"
+                      title="Give this account a friendly name for easy identification"
+                    ></i>
+                  </span>
+                </div>
+
                 @error('nickname')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
                 @enderror
@@ -178,43 +192,98 @@
 
               {{-- PIN --}}
               <div class="col-md-6">
-                <label class="form-label">PIN</label>
-                <input
-                  type="password"
-                  name="pin"
-                  maxlength="4"
-                  class="form-control @error('pin') is-invalid @enderror"
-                />
-                <small class="text-muted">Leave blank to keep existing PIN</small>
+                <label class="form-label">
+                  PIN
+                </label>
+
+                <div class="input-group input-group-merge">
+                  <input
+                    type="password"
+                    name="pin"
+                    maxlength="4"
+                    class="form-control @error('pin') is-invalid @enderror"
+                    placeholder="4-digit PIN"
+                  />
+
+                  <span class="input-group-text cursor-pointer">
+                    <i
+                      class="icon-base ti tabler-help-circle text-body-secondary"
+                      data-bs-toggle="tooltip"
+                      title="Leave empty if you don’t want to change the existing PIN"
+                    ></i>
+                  </span>
+                </div>
+                @error('pin')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
               </div>
 
               {{-- API Key --}}
               <div class="col-md-6">
-                <label class="form-label">API Key</label>
-                <input
-                  type="text"
-                  name="api_key"
-                  class="form-control @error('api_key') is-invalid @enderror"
-                />
-                <small class="text-muted">Leave blank to keep existing API Key</small>
+                <label class="form-label">
+                  API Key
+                </label>
+
+                <div class="input-group input-group-merge">
+                  <input
+                    type="text"
+                    name="api_key"
+                    class="form-control @error('api_key') is-invalid @enderror"
+                    placeholder="AngleOne API Key"
+                  />
+
+                  <span class="input-group-text cursor-pointer">
+                    <i
+                      class="icon-base ti tabler-help-circle text-body-secondary"
+                      data-bs-toggle="tooltip"
+                      title="Update only if you have regenerated your API key"
+                    ></i>
+                  </span>
+                </div>
+
+                @error('api_key')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
               </div>
 
               {{-- Client Secret --}}
               <div class="col-md-6">
-                <label class="form-label">Client Secret</label>
-                <input
-                  type="password"
-                  name="client_secret"
-                  class="form-control @error('client_secret') is-invalid @enderror"
-                />
-                <small class="text-muted">Leave blank to keep existing secret</small>
+                <label class="form-label">
+                  Client Secret
+                </label>
+
+                <div class="input-group input-group-merge">
+                  <input
+                    type="password"
+                    name="client_secret"
+                    class="form-control @error('client_secret') is-invalid @enderror"
+                    placeholder="Client Secret"
+                  />
+
+                  <span class="input-group-text cursor-pointer">
+                    <i
+                      class="icon-base ti tabler-help-circle text-body-secondary"
+                      data-bs-toggle="tooltip"
+                      title="Optional. Update only if provided by AngelOne"
+                    ></i>
+                  </span>
+                </div>
+
+                @error('client_secret')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
               </div>
 
             </div>
 
+            {{-- Actions --}}
             <div class="d-flex justify-content-end gap-2">
-              <button type="submit" class="btn btn-primary">Save Changes</button>
-              <button type="reset" class="btn btn-label-secondary">Cancel</button>
+              <button type="submit" class="btn btn-primary">
+                Save Changes
+              </button>
+              <button type="reset" class="btn btn-label-secondary">
+                Cancel
+              </button>
             </div>
           </form>
         </div>
