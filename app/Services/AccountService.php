@@ -21,7 +21,8 @@ class AccountService
       $query->where(function ($q) use ($search) {
         $q->where('account_name', 'like', "%{$search}%")
           ->orWhere('client_id', 'like', "%{$search}%")
-          ->orWhere('status', 'like', "%{$search}%");
+          ->orWhere('email', 'like', "%{$search}%")
+          ->orWhere('mobile', 'like', "%{$search}%");
       });
     }
     // USER FILTER
