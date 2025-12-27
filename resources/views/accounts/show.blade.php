@@ -284,7 +284,9 @@
 
       /* PRICE CARDS */
       document.getElementById('om-avgprice').innerText =
-        order.averageprice ? `₹${Number(order.averageprice).toFixed(2)}` : '—';
+        order.averageprice
+          ? `₹${indianCurrency(order.averageprice, 2)}`
+          : '—';
 
       document.getElementById('om-availableqty').innerText =
         order.quantity ?? '—';
@@ -300,7 +302,7 @@
 
       const circuitEl = document.getElementById('om-circuit');
       circuitEl.innerText = limits
-        ? `₹${limits.lower} - ₹${limits.upper}`
+        ? `₹${indianCurrency(limits.lower, 2)} - ₹${indianCurrency(limits.upper, 2)}`
         : '—';
 
       /* FORM RESET */
@@ -404,11 +406,11 @@
           const limits = circuitCache[activeToken];
           if (limits) {
             if (price > limits.upper) {
-              showError('om-price', `Above Upper Circuit ₹${limits.upper}`);
+              showError('om-price', `Above Upper Circuit ₹${indianCurrency(limits.upper,2)}`);
               hasError = true;
             }
             if (price < limits.lower) {
-              showError('om-price', `Below Lower Circuit ₹${limits.lower}`);
+              showError('om-price', `Below Lower Circuit ₹${indianCurrency(limits.lower,2)}`);
               hasError = true;
             }
           }
