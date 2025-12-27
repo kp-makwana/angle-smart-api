@@ -51,6 +51,14 @@ class AccountController extends Controller
   {
     $this->authorize('view',$account);
     $pageConfigs = ['myLayout' => 'horizontal'];
+    $status = $account->status;
+    if ($status == Account::STATUS_SIGNUP_FORM_SUBMITTED){
+      return redirect()->route('angle-one.create.step.two', $account->id);
+    } else if ($status == Account::STATUS_SIGNUP_SUCCESS){
+      return redirect()->route('angle-one.create.step.three', $account->id);
+    } else if ($status == Account::STATUS_TOTP_ENABLE){
+      return redirect()->route('angle-one.create.step.five', $account->id);
+    }
     $result = $this->service->getHoldings($account);
     if (!isset($result['data'])){
       return redirect()->route('accounts.index')->with('error','Rate limit exceeded');
