@@ -209,9 +209,6 @@
             {{-- Actions --}}
             <div class="col-12">
               <div class="d-flex justify-content-end gap-2 w-100">
-                <a href="{{ route('accounts.index') }}" class="btn btn-outline-secondary">
-                  <i class="ti tabler-arrow-left me-1"></i> Back
-                </a>
                 <button
                   type="submit"
                   class="btn btn-primary d-inline-flex align-items-center justify-content-center"
@@ -224,6 +221,9 @@
                     Creating...
                   </span>
                 </button>
+                <a href="{{ route('accounts.index') }}" class="btn btn-outline-secondary">
+                  <i class="ti tabler-arrow-left me-1"></i> Back
+                </a>
               </div>
             </div>
 
