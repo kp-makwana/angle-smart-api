@@ -26,6 +26,32 @@
     'resources/assets/js/app-ecommerce-customer-detail-overview.js'
   ])
   <script>
+    function indianCurrency(number, decimal = 0) {
+      if (number === null || number === undefined || isNaN(number)) {
+        return '0';
+      }
+
+      const factor = Math.pow(10, decimal);
+      const rounded = Math.round(number * factor) / factor;
+
+      let [integerPart, decimalPart] = rounded
+        .toFixed(decimal)
+        .split('.');
+
+      // Indian grouping
+      let lastThree = integerPart.slice(-3);
+      let otherNumbers = integerPart.slice(0, -3);
+
+      if (otherNumbers !== '') {
+        lastThree = ',' + lastThree;
+      }
+
+      otherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
+
+      return decimal > 0
+        ? otherNumbers + lastThree + '.' + decimalPart
+        : otherNumbers + lastThree;
+    }
     document.addEventListener('DOMContentLoaded', function() {
       const deleteBtn = document.getElementById('btn-delete-account');
       if (!deleteBtn) return;
@@ -185,7 +211,7 @@
           .forEach(cell => {
             const ltpEl = cell.querySelector('.ltp-live');
             if (ltpEl) {
-              ltpEl.innerText = `LTP ₹${ltp.toFixed(2)}`;
+              ltpEl.innerText = `LTP ₹${indianCurrency(ltp, 2)}`;
             }
           });
 
@@ -193,12 +219,12 @@
         if (token === activeModifyToken) {
 
           const ltpEl = document.getElementById('mo-ltp');
-          if (ltpEl) ltpEl.innerText = ltp.toFixed(2);
+          if (ltpEl) ltpEl.innerText = indianCurrency(ltp, 2);
 
           if (circuitCache[token]) {
             const limits = circuitCache[token];
             document.getElementById('mo-circuit').innerText =
-              `₹${limits.lower} - ₹${limits.upper}`;
+              `₹${indianCurrency(limits.lower, 2)} - ₹${indianCurrency(limits.upper, 2)}`;
           }
         }
       };
@@ -236,7 +262,7 @@
       document.getElementById('mo-order-price').innerText =
         order.ordertype === 'MARKET'
           ? 'AT MARKET'
-          : `₹${Number(order.price).toFixed(2)}`;
+          : `₹${indianCurrency(order.price, 2)}`;
 
       document.getElementById('mo-qty-card').innerText = order.quantity;
 
@@ -265,7 +291,7 @@
       /* CIRCUIT */
       document.getElementById('mo-circuit').innerText =
         circuitCache[order.symboltoken]
-          ? `₹${circuitCache[order.symboltoken].lower} - ₹${circuitCache[order.symboltoken].upper}`
+          ? `₹${indianCurrency(circuitCache[order.symboltoken].lower, 2)} - ₹${indianCurrency(circuitCache[order.symboltoken].upper, 2)}`
           : '—';
 
       /* RESET SUBMIT BUTTON */
@@ -809,10 +835,10 @@
           ? 'AT MARKET'
           : `₹${Number(o.price).toFixed(2)}`;
 
-      document.getElementById('vo-executed-price').innerText =
-        o.averageprice && o.averageprice > 0
-          ? `₹${Number(o.averageprice).toFixed(2)}`
-          : '—';
+      document.getElementById('vo-price').innerText =
+        o.ordertype === 'MARKET'
+          ? 'AT MARKET'
+          : `₹${indianCurrency(o.price, 2)}`;
 
       // SIDE BADGE
       const sideEl = document.getElementById('vo-side');
