@@ -10,5 +10,14 @@
         <i class="icon-base ti tabler-shopping-cart icon-sm me-1_5"></i> Orders
       </a>
     </li>
+    <li class="nav-item">
+      <a
+        class="nav-link {{ \Illuminate\Support\Facades\Route::is('accounts.edit') ? 'active' : '' }}"
+        href="{{ route('accounts.edit', request('account')) }}"
+      >
+        <i class="icon-base ti tabler-edit icon-sm me-1_5"></i>
+        Account Settings
+      </a>
+    </li>
   </ul>
 </div>

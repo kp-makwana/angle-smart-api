@@ -20,10 +20,6 @@
   'resources/assets/vendor/libs/@form-validation/auto-focus.js'])
 @endsection
 
-@section('page-style')
-  @vite(['resources/assets/vendor/scss/pages/page-profile.scss'])
-@endsection
-
 @section('page-script')
   @vite([
     'resources/assets/js/modal-edit-user.js',

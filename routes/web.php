@@ -449,7 +449,7 @@ Route::middleware('auth')->group(function () {
   Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
-  Route::resource('accounts', AccountController::class)->only(['index', 'create', 'store', 'destroy', 'show']);
+  Route::resource('accounts', AccountController::class);
 
   Route::prefix('account')->name('account.')->group(function () {
     Route::get('refresh/{account}', [AccountController::class, 'refresh'])->name('refresh');

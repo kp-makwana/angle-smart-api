@@ -1,4 +1,7 @@
 @props(['account'])
+@section('page-style')
+  @vite(['resources/assets/vendor/scss/pages/page-profile.scss'])
+@endsection
 
 <style>
   .gradient-banner {
@@ -93,7 +96,7 @@
             </div>
 
             {{-- Status Button --}}
-            <a href="#"
+            <a href="{{ route('accounts.edit',$account->id) }}"
                class="btn btn-primary mb-1">
               <i class="icon-base ti tabler-edit icon-xs me-2"></i>
               Edit Account

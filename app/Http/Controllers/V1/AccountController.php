@@ -82,8 +82,24 @@ class AccountController extends Controller
     return view('accounts.show', compact('account','pageConfigs','summary','holdings','tokens'));
   }
 
+  public function edit(Account $account)
+  {
+    $this->authorize('view',$account);
+    if ($account->status != Account::STATUS_ACTIVE){
+      return redirect()->route('accounts.index')->with('error','Account setup not properly. Delete account and try again');
+    }
+    $pageConfigs = ['myLayout' => 'horizontal'];
+    return view('accounts.edit',compact('account','pageConfigs'));
+  }
+
+  public function update(Account $account)
+  {
+
+  }
+
   public function destroy(Account $account)
   {
+    dd('sdfsdf');
     $this->authorize('delete', $account);
     $this->service->destroy($account);
     return redirect()
