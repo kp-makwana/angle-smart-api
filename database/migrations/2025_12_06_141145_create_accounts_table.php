@@ -29,6 +29,7 @@ return new class extends Migration
         $table->string('totp_secret')->nullable();
 
         $table->string('smart_api_jwt_token')->nullable();
+        $table->string('smart_api_refresh_token')->nullable();
 
         // Token / Session Data
         $table->text('session_token')->nullable();
