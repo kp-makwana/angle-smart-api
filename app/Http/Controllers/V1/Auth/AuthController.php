@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Auth\LoginRequest;
 use App\Http\Requests\V1\Auth\RegisterRequest;
 use App\Services\AuthService;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -73,7 +74,24 @@ class AuthController extends Controller
 
   public function profile()
   {
+    $user = auth()->user();
     $pageConfigs = ['myLayout' => 'horizontal'];
-    return view('auth.profile',compact('pageConfigs'));
+    return view('auth.profile',compact('pageConfigs','user'));
+  }
+
+  public function profileUpdate(Request $request)
+  {
+    return redirect()->back()->with('success', 'Profile updated successfully');
+  }
+
+  public function security()
+  {
+    $pageConfigs = ['myLayout' => 'horizontal'];
+    return view('auth.security',compact('pageConfigs'));
+  }
+
+  public function securityUpdate(Request $request){
+    dd($request->all());
+    return redirect()->back()->with('success', 'Profile updated successfully');
   }
 }

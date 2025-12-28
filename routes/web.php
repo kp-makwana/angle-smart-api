@@ -447,6 +447,9 @@ Route::middleware('auth')->group(function () {
   Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
   Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
   Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+  Route::post('/profile', [AuthController::class, 'profileUpdate'])->name('profile.update');
+  Route::get('/security', [AuthController::class, 'security'])->name('security');
+  Route::post('/security', [AuthController::class, 'securityUpdate'])->name('security.update');
 
   Route::resource('accounts', AccountController::class);
   Route::prefix('account')->name('account.')->group(function () {
@@ -491,4 +494,3 @@ Route::middleware('auth')->group(function () {
   Route::get('/up-stox', [HomeController::class, 'comingSoon'])->name('up-stox');
   Route::get('/5paisa', [HomeController::class, 'comingSoon'])->name('5paisa');
 });
-
