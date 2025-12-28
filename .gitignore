@@ -48,3 +48,4 @@ yarn-error.log
 /.env
 /package-lock.json
 /composer.lock
+public/sitemap.xml
