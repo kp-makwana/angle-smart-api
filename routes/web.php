@@ -169,11 +169,6 @@ use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\layouts\NavbarFullSidebar;
 //use App\Http\Controllers\cards\CardGamifications;
 
-// Webhooks
-Route::post('angle-one/postback/webhook', function (\Illuminate\Http\Request $request) {
-  \Illuminate\Support\Facades\Log::info('postback webhook', [$request->all()]);
-})->name('angle-one.postback.webhook');
-
 Route::get('angle-one/postback/redirect/{slug}', function (\Illuminate\Http\Request $request, $slug) {
   \Illuminate\Support\Facades\Log::info('redirect webhook', [$slug, $request->all()]);
 })->name('angle-one.redirect.webhook');
@@ -199,7 +194,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 // Main Page Route
   /*Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
   Route::get('/', [Analytics::class, 'index'])->name('home');*/
-  Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics');
+  Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics1');
   Route::get('/dashboard/crm', [Crm::class, 'index'])->name('dashboard-crm');
 // locale
   Route::get('/lang/{locale}', [LanguageController::class, 'swap']);
@@ -210,7 +205,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
   Route::get('/layouts/content-nav-sidebar', [ContentNavSidebar::class, 'index'])->name('layouts-content-nav-sidebar');
 //Route::get('/layouts/navbar-full', [NavbarFull::class, 'index'])->name('layouts-navbar-full');
 //Route::get('/layouts/navbar-full-sidebar', [NavbarFullSidebar::class, 'index'])->name('layouts-navbar-full-sidebar');
-  Route::get('/layouts/horizontal', [Horizontal::class, 'index'])->name('dashboard-analytics');
+  Route::get('/layouts/horizontal', [Horizontal::class, 'index'])->name('dashboard-analytic');
   Route::get('/layouts/vertical', [Vertical::class, 'index'])->name('dashboard-analytics');
   Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');
   Route::get('/layouts/without-navbar', [WithoutNavbar::class, 'index'])->name('layouts-without-navbar');
@@ -294,7 +289,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
   Route::get('/auth/register-multisteps', [RegisterMultiSteps::class, 'index'])->name('auth-register-multisteps');
   Route::get('/auth/verify-email-basic', [VerifyEmailBasic::class, 'index'])->name('auth-verify-email-basic');
   Route::get('/auth/verify-email-cover', [VerifyEmailCover::class, 'index'])->name('auth-verify-email-cover');
-  Route::get('/auth/reset-password-basic', [ResetPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
+  Route::get('/auth/reset-password-basic', [ResetPasswordBasic::class, 'index'])->name('auth-reset-password-basic1');
   Route::get('/auth/reset-password-cover', [ResetPasswordCover::class, 'index'])->name('auth-reset-password-cover');
   Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
   Route::get('/auth/forgot-password-cover', [ForgotPasswordCover::class, 'index'])->name('auth-forgot-password-cover');
