@@ -444,14 +444,10 @@ Route::post('/contact-us', [HomeController::class, 'contactUs'])->name('contact-
 // AUTHENTICATED ROUTES
 // -----------------------------
 Route::middleware('auth')->group(function () {
-  // Dashboard
   Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
-  // Logout
-  Route::post('/logout', [AuthController::class, 'logout'])
-    ->name('logout');
+  Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
   Route::resource('accounts', AccountController::class);
-
   Route::prefix('account')->name('account.')->group(function () {
     Route::get('refresh/{account}', [AccountController::class, 'refresh'])->name('refresh');
     Route::get('{account}/orders', [AccountController::class, 'orders'])->name('orders');
@@ -462,7 +458,6 @@ Route::middleware('auth')->group(function () {
     Route::get('{account}/positions', [AccountController::class, 'positions'])->name('positions');
     Route::get('{account}/balance', [AccountController::class, 'balance'])->name('balance');
   });
-
   Route::prefix('angle-one')->name('angle-one.')->group(function () {
     // Step 1
     Route::get('account/step-one', [AngleOneAccount::class, 'createStepOne'])->name('create.step.one');
@@ -487,5 +482,11 @@ Route::middleware('auth')->group(function () {
     Route::get('account/step-five/{account}', [AngleOneAccount::class, 'createStepFive'])->name('create.step.five');
     Route::post('account/step-five/{account}', [AngleOneAccount::class, 'submitStepFive'])->name('submit.step.five');
   });
+
+  Route::get('/dhan', [HomeController::class, 'comingSoon'])->name('dhan');
+  Route::get('/zerodha', [HomeController::class, 'comingSoon'])->name('zirodha');
+  Route::get('/groww', [HomeController::class, 'comingSoon'])->name('groww');
+  Route::get('/up-stox', [HomeController::class, 'comingSoon'])->name('up-stox');
+  Route::get('/5paisa', [HomeController::class, 'comingSoon'])->name('5paisa');
 });
 

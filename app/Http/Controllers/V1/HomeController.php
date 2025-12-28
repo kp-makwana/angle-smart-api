@@ -32,4 +32,10 @@ class HomeController extends Controller
 
     return back()->with('success', 'Message sent successfully.');
   }
+
+  public function comingSoon()
+  {
+    $pageConfigs = ['myLayout' => 'horizontal'];
+    return view('pages.coming-soon-main',compact('pageConfigs'));
+  }
 }

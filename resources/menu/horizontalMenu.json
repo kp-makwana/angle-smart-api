@@ -7,10 +7,40 @@
       "url": "dashboard"
     },
     {
-      "name": "AngelOne",
-      "icon": "menu-icon icon-base ti tabler-users",
+      "name": "Angel One",
+      "icon": "menu-icon icon-base ti tabler-chart-line",
       "slug": "accounts",
       "url": "accounts"
+    },
+    {
+      "name": "Dhan",
+      "icon": "menu-icon icon-base ti tabler-currency-rupee",
+      "slug": "dhan",
+      "url": "dhan"
+    },
+    {
+      "name": "Zerodha",
+      "icon": "menu-icon icon-base ti tabler-trending-up",
+      "slug": "zerodha",
+      "url": "zerodha"
+    },
+    {
+      "name": "Groww",
+      "icon": "menu-icon icon-base ti tabler-plant-2",
+      "slug": "groww",
+      "url": "groww"
+    },
+    {
+      "name": "Upstox",
+      "icon": "menu-icon icon-base ti tabler-chart-bar",
+      "slug": "up-stox",
+      "url": "up-stox"
+    },
+    {
+      "name": "5paisa",
+      "icon": "menu-icon icon-base ti tabler-coins",
+      "slug": "5paisa",
+      "url": "5paisa"
     }
   ]
 }
