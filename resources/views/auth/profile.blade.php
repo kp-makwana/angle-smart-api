@@ -111,7 +111,12 @@
 
             </div>
             <div class="mt-6">
-              <button type="submit" class="btn btn-primary">Save Changes</button>
+              {{-- Updated Submit Button with Spinner --}}
+              <button type="submit" class="btn btn-primary me-3" id="profileSubmitBtn">
+                <span class="btn-text">Save Changes</span>
+                <span class="spinner-border spinner-border-sm d-none ms-2" role="status" aria-hidden="true"></span>
+                <span class="btn-loading-text d-none ms-2">Updating...</span>
+              </button>
               <button type="reset" class="btn btn-label-secondary">Cancel</button>
             </div>
           </form>
@@ -119,4 +124,22 @@
       </div>
     </div>
   </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const profileForm = document.getElementById('formAccountSettings');
+      const submitBtn = document.getElementById('profileSubmitBtn');
+
+      if (profileForm && submitBtn) {
+        profileForm.addEventListener('submit', function() {
+          // Disable button to prevent double submission
+          submitBtn.disabled = true;
+
+          // Toggle visibility of text and spinner
+          submitBtn.querySelector('.btn-text').classList.add('d-none');
+          submitBtn.querySelector('.spinner-border').classList.remove('d-none');
+          submitBtn.querySelector('.btn-loading-text').classList.remove('d-none');
+        });
+      }
+    });
+  </script>
 @endsection
