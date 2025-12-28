@@ -4,24 +4,48 @@
       {
         "name": "Dashboard",
         "icon": "menu-icon icon-base ti tabler-smart-home",
+        "slug": "dashboard",
         "url": "dashboard"
       },
       {
         "name": "Accounts",
         "icon": "menu-icon icon-base ti tabler-chart-line",
-        "url": "accounts"
+        "slug": ["accounts", "angle-one"],
+        "url": "accounts",
+        "submenu": [
+          {
+            "name": "Accounts List",
+            "icon": "menu-icon icon-base ti tabler-list-details",
+            "slug": "accounts",
+            "url": "accounts"
+          },
+          {
+            "name": "Add With OTP",
+            "icon": "menu-icon icon-base ti tabler-device-mobile-message",
+            "slug": "angle-one",
+            "url": "angle-one/account/step-one"
+          },
+          {
+            "name": "Add With API Key",
+            "icon": "menu-icon icon-base ti tabler-key",
+            "slug": "accounts.create",
+            "url": "accounts/create"
+          }
+        ]
       }
     ],
-    "Account Actions": [
+    "User Settings": [
       {
-        "name": "Add Account (Using API Key)",
-        "icon": "menu-icon icon-base ti tabler-plus",
-        "url": "accounts/create"
+        "name": "My Profile",
+        "icon": "menu-icon icon-base ti tabler-user-circle",
+        "slug": ["profile"],
+        "url": "profile"
       },
       {
-        "name": "Add Account (Using OTP)",
-        "icon": "menu-icon icon-base ti tabler-compass",
-        "url": "angle-one/account/step-one"
+        "name": "Password Update",
+        "icon": "menu-icon icon-base ti tabler-password",
+        "slug": ["security"],
+        "url": "security"
       }
     ],
     "Brokers": [
@@ -65,52 +89,25 @@
         "url": "dashboard"
       },
       {
-        "name": "Accounts",
-        "icon": "tabler-chart-line",
-        "url": "accounts"
+        "name": "My Profile",
+        "icon": "tabler-user-circle",
+        "url": "profile"
       },
       {
-        "name": "Add Account (Using API Key)",
+        "name": "Change Password",
+        "icon": "tabler-password",
+        "url": "security"
+      },
+      {
+        "name": "Add New Broker",
         "icon": "tabler-plus",
         "url": "accounts/create"
-      },
-      {
-        "name": "Add Account (Using OTP)",
-        "icon": "tabler-compass",
-        "url": "angle-one/account/step-one"
       }
     ],
     "Brokers": [
-      {
-        "name": "Angel One",
-        "icon": "tabler-compass",
-        "url": "accounts"
-      },
-      {
-        "name": "Dhan",
-        "icon": "tabler-currency-rupee",
-        "url": "dhan"
-      },
-      {
-        "name": "Zerodha",
-        "icon": "tabler-trending-up",
-        "url": "zerodha"
-      },
-      {
-        "name": "Groww",
-        "icon": "tabler-plant-2",
-        "url": "groww"
-      },
-      {
-        "name": "Upstox",
-        "icon": "tabler-chart-bar",
-        "url": "up-stox"
-      },
-      {
-        "name": "5paisa",
-        "icon": "tabler-coins",
-        "url": "5paisa"
-      }
+      { "name": "Angel One", "icon": "tabler-compass", "url": "accounts" },
+      { "name": "Dhan", "icon": "tabler-currency-rupee", "url": "dhan" },
+      { "name": "Zerodha", "icon": "tabler-trending-up", "url": "zerodha" }
     ]
   }
 }
