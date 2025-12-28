@@ -39,19 +39,19 @@ $activeClass = in_array($currentRouteName, $activeRoutes) ? 'active' : '';
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
             <a class="nav-link fw-medium" aria-current="page"
-              href="{{ route('home') }}#landingHero">Home</a>
+              href="{{ route('home') }}#home">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-medium" href="{{ route('home') }}#landingFeatures">Features</a>
+            <a class="nav-link fw-medium" href="{{ route('home') }}#features">Features</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-medium" href="{{ route('home') }}#landingTeam">Team</a>
+            <a class="nav-link fw-medium" href="{{ route('home') }}#team">Team</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-medium" href="{{ route('home') }}#landingFAQ">FAQ</a>
+            <a class="nav-link fw-medium" href="{{ route('home') }}#FAQ">FAQ</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-medium" href="{{ route('home') }}#landingContact">Contact
+            <a class="nav-link fw-medium" href="{{ route('home') }}#contact">Contact
               us</a>
           </li>
           {{--<li class="nav-item mega-dropdown {{ $activeClass }}">

@@ -4,7 +4,7 @@
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Home')
+@section('title', 'Dmatx – Manage Multiple Demat Accounts Securely')
 
 <!-- Vendor Styles -->
 @section('vendor-style')
@@ -31,7 +31,7 @@
   <div data-bs-spy="scroll" class="scrollspy-example">
     <!-- Hero: Start -->
     <section id="hero-animation">
-      <div id="landingHero" class="section-py landing-hero position-relative">
+      <div id="home" class="section-py landing-hero position-relative">
         <img
           src="{{ asset('assets/img/front-pages/backgrounds/hero-bg.png') }}"
           alt="hero background"
@@ -93,7 +93,7 @@
     <!-- Hero: End -->
 
     <!-- Useful features: Start -->
-    <section id="landingFeatures" class="section-py landing-features">
+    <section id="features" class="section-py landing-features">
       <div class="container">
         <div class="text-center mb-4">
           <span class="badge bg-label-primary">Platform Features</span>
@@ -447,7 +447,7 @@
     <!-- Real customers reviews: End -->
 
     <!-- Our great team: Start -->
-    <section id="landingTeam" class="section-py landing-team">
+    <section id="team" class="section-py landing-team">
       <div class="container">
         <div class="text-center mb-4">
           <span class="badge bg-label-primary">Our Team</span>
@@ -545,7 +545,7 @@
     <!-- Our great team: End -->
 
     <!-- Pricing plans: Start -->
-    <section id="landingPricing" class="section-py bg-body landing-pricing">
+    <section id="pricing" class="section-py bg-body landing-pricing">
       <div class="container">
         <div class="text-center mb-4">
           <span class="badge bg-label-primary">Pricing Plans</span>
@@ -815,7 +815,7 @@
     <!-- Fun facts: End -->
 
     <!-- FAQ: Start -->
-    <section id="landingFAQ" class="section-py bg-body landing-faq">
+    <section id="FAQ" class="section-py bg-body landing-faq">
       <div class="container">
 
         <div class="text-center mb-4">
@@ -982,7 +982,7 @@
     <!-- FAQ: End -->
 
     <!-- CTA: Start -->
-    <section id="landingCTA" class="section-py landing-cta position-relative p-lg-0 pb-0">
+    <section id="CTA" class="section-py landing-cta position-relative p-lg-0 pb-0">
       <img
         src="{{ asset('assets/img/front-pages/backgrounds/cta-bg-' . $configData['theme'] . '.png') }}"
         class="position-absolute bottom-0 end-0 scaleX-n1-rtl h-100 w-100 z-n1"
@@ -1022,7 +1022,7 @@
     <!-- CTA: End -->
 
     <!-- Contact Us: Start -->
-    <section id="landingContact" class="section-py bg-body landing-contact">
+    <section id="contact" class="section-py bg-body landing-contact">
       <div class="container">
         <div class="text-center mb-4">
           <span class="badge bg-label-primary">Contact Us</span>
