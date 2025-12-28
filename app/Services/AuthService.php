@@ -98,4 +98,10 @@ class AuthService
   {
     return random_int(100000, 999999);
   }
+
+  public function UpdatePassword($user,$password)
+  {
+    $user->password = Hash::make($password);
+    $user->save();
+  }
 }

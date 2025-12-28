@@ -4,7 +4,9 @@ namespace App\Http\Controllers\V1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Auth\LoginRequest;
+use App\Http\Requests\V1\Auth\profileUpdateRequest;
 use App\Http\Requests\V1\Auth\RegisterRequest;
+use App\Http\Requests\V1\Auth\UpdatePasswordRequest;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -79,8 +81,11 @@ class AuthController extends Controller
     return view('auth.profile',compact('pageConfigs','user'));
   }
 
-  public function profileUpdate(Request $request)
+  public function profileUpdate(profileUpdateRequest $request)
   {
+    $validatedData = $request->validated();
+    $user = auth()->user();
+    $user->update($validatedData);
     return redirect()->back()->with('success', 'Profile updated successfully');
   }
 
@@ -90,8 +95,11 @@ class AuthController extends Controller
     return view('auth.security',compact('pageConfigs'));
   }
 
-  public function securityUpdate(Request $request){
-    dd($request->all());
-    return redirect()->back()->with('success', 'Profile updated successfully');
+  public function securityUpdate(UpdatePasswordRequest $request)
+  {
+    $validatedData = $request->validated();
+    $user = auth()->user();
+    $this->auth->UpdatePassword($user,$validatedData['password']);
+    return redirect()->back()->with('success', 'Password updated successfully');
   }
 }

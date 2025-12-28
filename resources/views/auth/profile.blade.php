@@ -60,23 +60,55 @@
               </div>
             </div>
             <div class="row g-4">
+
+              {{-- Name --}}
               <div class="col-md-6">
                 <label class="form-label">Name</label>
-                <input type="text" name="name" class="form-control" value="{{ $user->name }}">
+                <input
+                  type="text"
+                  name="name"
+                  class="form-control @error('name') is-invalid @enderror"
+                  value="{{ old('name', $user->name) }}"
+                >
+                @error('name')
+                <div class="invalid-feedback">
+                  {{ $message }}
+                </div>
+                @enderror
               </div>
 
+              {{-- Email (readonly, no validation needed) --}}
               <div class="col-md-6">
                 <label class="form-label">Email</label>
-                <input type="email" disabled class="form-control" value="{{ $user->email }}">
+                <input
+                  type="email"
+                  class="form-control"
+                  value="{{ $user->email }}"
+                  disabled
+                >
               </div>
 
+              {{-- Language --}}
               <div class="col-md-6">
                 <label class="form-label">Language</label>
-                <select name="language" class="form-select">
-                  <option value="en" {{ $user->language === 'en' ? 'selected' : '' }}>English</option>
-                  <option value="hi" {{ $user->language === 'hi' ? 'selected' : '' }}>Hindi</option>
+                <select
+                  name="language"
+                  class="form-select @error('language') is-invalid @enderror"
+                >
+                  <option value="en" {{ old('language', $user->language) === 'en' ? 'selected' : '' }}>
+                    English
+                  </option>
+                  <option value="hi" {{ old('language', $user->language) === 'hi' ? 'selected' : '' }}>
+                    Hindi
+                  </option>
                 </select>
+                @error('language')
+                <div class="invalid-feedback">
+                  {{ $message }}
+                </div>
+                @enderror
               </div>
+
             </div>
             <div class="mt-6">
               <button type="submit" class="btn btn-primary">Save Changes</button>
