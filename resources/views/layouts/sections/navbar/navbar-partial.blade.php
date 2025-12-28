@@ -123,90 +123,107 @@ use Illuminate\Support\Facades\Route;
     @endif
 
     <!-- Quick links  -->
-    <li class="nav-item dropdown-shortcuts navbar-dropdown dropdown">
-      <a class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill"
-        href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-        <i class="icon-base ti tabler-layout-grid-add icon-22px text-heading"></i>
-      </a>
-      <div class="dropdown-menu dropdown-menu-end p-0">
-        <div class="dropdown-menu-header border-bottom">
-          <div class="dropdown-header d-flex align-items-center py-3">
-            <h6 class="mb-0 me-auto">Shortcuts</h6>
-            <a href="javascript:void(0)"
-              class="dropdown-shortcuts-add py-2 btn btn-text-secondary rounded-pill btn-icon" data-bs-toggle="tooltip"
-              data-bs-placement="top" title="Add shortcuts"><i
-                class="icon-base ti tabler-plus icon-20px text-heading"></i></a>
+      <!-- Quick links -->
+      <li class="nav-item dropdown-shortcuts navbar-dropdown dropdown">
+        <a class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill"
+           href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+          <i class="icon-base ti tabler-layout-grid-add icon-22px text-heading"></i>
+        </a>
+
+        <div class="dropdown-menu dropdown-menu-end p-0">
+          <div class="dropdown-menu-header border-bottom">
+            <div class="dropdown-header d-flex align-items-center py-3">
+              <h6 class="mb-0 me-auto">Shortcuts</h6>
+            </div>
+          </div>
+
+          <div class="dropdown-shortcuts-list scrollable-container">
+
+            {{-- Row 1 --}}
+            <div class="row row-bordered g-0">
+              <div class="dropdown-shortcuts-item col">
+          <span class="dropdown-shortcuts-icon rounded-circle mb-3">
+            <i class="icon-base ti tabler-smart-home icon-26px text-heading"></i>
+          </span>
+                <a href="{{ route('dashboard') }}" class="stretched-link">Dashboard</a>
+                <small>Overview</small>
+              </div>
+
+              <div class="dropdown-shortcuts-item col">
+          <span class="dropdown-shortcuts-icon rounded-circle mb-3">
+            <i class="icon-base ti tabler-chart-line icon-26px text-heading"></i>
+          </span>
+                <a href="{{ route('accounts.index') }}" class="stretched-link">Accounts</a>
+                <small>All accounts</small>
+              </div>
+            </div>
+
+            {{-- Row 2 --}}
+            <div class="row row-bordered g-0">
+              <div class="dropdown-shortcuts-item col">
+          <span class="dropdown-shortcuts-icon rounded-circle mb-3">
+            <i class="icon-base ti tabler-plus icon-26px text-heading"></i>
+          </span>
+                <a href="{{ route('accounts.create') }}" class="stretched-link">
+                  Add Account
+                </a>
+                <small>Manual setup</small>
+              </div>
+
+              <div class="dropdown-shortcuts-item col">
+          <span class="dropdown-shortcuts-icon rounded-circle mb-3">
+            <i class="icon-base ti tabler-compass icon-26px text-heading"></i>
+          </span>
+                <a href="{{ route('angle-one.create.step.one') }}" class="stretched-link">
+                  Angel One
+                </a>
+                <small>Auto setup</small>
+              </div>
+            </div>
+
+            {{-- Row 3 --}}
+            <div class="row row-bordered g-0">
+              <div class="dropdown-shortcuts-item col">
+          <span class="dropdown-shortcuts-icon rounded-circle mb-3">
+            <i class="icon-base ti tabler-currency-rupee icon-26px text-heading"></i>
+          </span>
+                <a href="{{ route('dhan') }}" class="stretched-link">Dhan</a>
+                <small>Coming soon</small>
+              </div>
+
+              <div class="dropdown-shortcuts-item col">
+          <span class="dropdown-shortcuts-icon rounded-circle mb-3">
+            <i class="icon-base ti tabler-trending-up icon-26px text-heading"></i>
+          </span>
+                <a href="{{ route('zirodha') }}" class="stretched-link">Zerodha</a>
+                <small>Coming soon</small>
+              </div>
+            </div>
+
+            {{-- Row 4 --}}
+            <div class="row row-bordered g-0">
+              <div class="dropdown-shortcuts-item col">
+          <span class="dropdown-shortcuts-icon rounded-circle mb-3">
+            <i class="icon-base ti tabler-plant-2 icon-26px text-heading"></i>
+          </span>
+                <a href="{{ route('groww') }}" class="stretched-link">Groww</a>
+                <small>Coming soon</small>
+              </div>
+
+              <div class="dropdown-shortcuts-item col">
+          <span class="dropdown-shortcuts-icon rounded-circle mb-3">
+            <i class="icon-base ti tabler-chart-bar icon-26px text-heading"></i>
+          </span>
+                <a href="{{ route('up-stox') }}" class="stretched-link">Upstox</a>
+                <small>Coming soon</small>
+              </div>
+            </div>
+
           </div>
         </div>
-        <div class="dropdown-shortcuts-list scrollable-container">
-          <div class="row row-bordered overflow-visible g-0">
-            <div class="dropdown-shortcuts-item col">
-              <span class="dropdown-shortcuts-icon rounded-circle mb-3">
-                <i class="icon-base ti tabler-calendar icon-26px text-heading"></i>
-              </span>
-              <a href="{{ url('app/calendar') }}" class="stretched-link">Calendar</a>
-              <small>Appointments</small>
-            </div>
-            <div class="dropdown-shortcuts-item col">
-              <span class="dropdown-shortcuts-icon rounded-circle mb-3">
-                <i class="icon-base ti tabler-file-dollar icon-26px text-heading"></i>
-              </span>
-              <a href="{{ url('app/invoice/list') }}" class="stretched-link">Invoice App</a>
-              <small>Manage Accounts</small>
-            </div>
-          </div>
-          <div class="row row-bordered overflow-visible g-0">
-            <div class="dropdown-shortcuts-item col">
-              <span class="dropdown-shortcuts-icon rounded-circle mb-3">
-                <i class="icon-base ti tabler-user icon-26px text-heading"></i>
-              </span>
-              <a href="{{ url('app/user/list') }}" class="stretched-link">User App</a>
-              <small>Manage Users</small>
-            </div>
-            <div class="dropdown-shortcuts-item col">
-              <span class="dropdown-shortcuts-icon rounded-circle mb-3">
-                <i class="icon-base ti tabler-users icon-26px text-heading"></i>
-              </span>
-              <a href="{{ url('app/access-roles') }}" class="stretched-link">Role Management</a>
-              <small>Permission</small>
-            </div>
-          </div>
-          <div class="row row-bordered overflow-visible g-0">
-            <div class="dropdown-shortcuts-item col">
-              <span class="dropdown-shortcuts-icon rounded-circle mb-3">
-                <i class="icon-base ti tabler-device-desktop-analytics icon-26px text-heading"></i>
-              </span>
-              <a href="{{ url('/') }}" class="stretched-link">Dashboard</a>
-              <small>User Dashboard</small>
-            </div>
-            <div class="dropdown-shortcuts-item col">
-              <span class="dropdown-shortcuts-icon rounded-circle mb-3">
-                <i class="icon-base ti tabler-settings icon-26px text-heading"></i>
-              </span>
-              <a href="{{ url('pages/account-settings-account') }}" class="stretched-link">Setting</a>
-              <small>Account Settings</small>
-            </div>
-          </div>
-          <div class="row row-bordered overflow-visible g-0">
-            <div class="dropdown-shortcuts-item col">
-              <span class="dropdown-shortcuts-icon rounded-circle mb-3">
-                <i class="icon-base ti tabler-help-circle icon-26px text-heading"></i>
-              </span>
-              <a href="{{ url('pages/faq') }}" class="stretched-link">FAQs</a>
-              <small>FAQs & Articles</small>
-            </div>
-            <div class="dropdown-shortcuts-item col">
-              <span class="dropdown-shortcuts-icon rounded-circle mb-3">
-                <i class="icon-base ti tabler-square icon-26px text-heading"></i>
-              </span>
-              <a href="{{ url('modal-examples') }}" class="stretched-link">Modals</a>
-              <small>Useful Popups</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </li>
-    <!-- Quick links -->
+      </li>
+      <!-- /Quick links -->
+      <!-- Quick links -->
 
     <!-- Notification -->
     <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
